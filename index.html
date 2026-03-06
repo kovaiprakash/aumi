@@ -1,100 +1,721 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="icon" href="favicon.png" type="image/png">
-  <title>AuMi | Electric</title>
-  <style>
-    body {
-      margin: 0; font-family: Arial, sans-serif; line-height: 1.6; background: #f4f4f4;
-    }
-    header {
-      background: #AEAEAE; color: #fff; padding: 1rem 0; text-align: center;
-    }
-    nav a {
-      color: white; margin: 0 15px; text-decoration: none;
-    }
-    section {
-      padding: 2rem; max-width: 900px; margin: auto;
-    }
-    .project {
-      background: white; padding: 1rem; margin-bottom: 1rem; border-radius: 5px;
-    }
-    footer {
-      text-align: center; padding: 1rem; background: #333; color: white;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuMi Robotics & Mobility Solutions</title>
+<link rel="icon" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+font-family:'Poppins',sans-serif;
+background:#0f172a;
+color:#e5e7eb;
+line-height:1.6;
+}
+
+header{
+position:fixed;
+width:100%;
+top:0;
+background:rgba(15,23,42,0.85);
+backdrop-filter:blur(10px);
+z-index:1000;
+}
+
+nav{
+max-width:1200px;
+margin:auto;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:15px 20px;
+}
+
+nav img{height:55px}
+
+nav ul{display:flex;list-style:none}
+
+nav ul li{margin-left:25px}
+
+nav a{
+color:white;
+text-decoration:none;
+font-weight:500;
+transition:0.3s;
+}
+
+nav a:hover{color:#22c55e}
+
+
+
+
+.hero{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:120px 20px 60px;
+background:linear-gradient(135deg,#020617,#0f172a,#1e293b);
+position:relative;
+overflow:hidden;
+}
+
+.hero-content{
+max-width:850px;
+z-index:2;
+}
+
+.hero h1{
+font-size:56px;
+font-weight:700;
+line-height:1.2;
+margin-bottom:20px;
+}
+
+.hero h1 span{
+background:linear-gradient(90deg,#22c55e,#4ade80);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.hero p{
+font-size:20px;
+color:#94a3b8;
+margin-bottom:40px;
+}
+
+.hero-buttons{
+display:flex;
+gap:20px;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.btn-primary{
+background:#22c55e;
+padding:14px 30px;
+border-radius:8px;
+text-decoration:none;
+color:white;
+font-weight:600;
+transition:0.3s;
+}
+
+.btn-primary:hover{
+background:#16a34a;
+transform:translateY(-2px);
+}
+
+.btn-secondary{
+border:1px solid #334155;
+padding:14px 30px;
+border-radius:8px;
+text-decoration:none;
+color:#e5e7eb;
+font-weight:500;
+transition:0.3s;
+}
+
+.btn-secondary:hover{
+background:#1e293b;
+}
+
+
+
+
+
+.glow{
+position:absolute;
+width:600px;
+height:600px;
+background:radial-gradient(circle,#22c55e55,transparent 70%);
+top:20%;
+left:50%;
+transform:translateX(-50%);
+filter:blur(120px);
+animation:glowMove 8s infinite alternate ease-in-out;
+}
+
+@keyframes glowMove{
+0%{
+transform:translate(-50%,0);
+}
+
+100%{
+transform:translate(-40%,40px);
+}
+}
+
+
+
+.circuit-lines{
+position:absolute;
+width:100%;
+height:100%;
+top:0;
+left:0;
+background-image:
+linear-gradient(90deg,rgba(34,197,94,0.08) 1px,transparent 1px),
+linear-gradient(rgba(34,197,94,0.08) 1px,transparent 1px);
+background-size:80px 80px;
+animation:circuitMove 20s linear infinite;
+pointer-events:none;
+}
+
+@keyframes circuitMove{
+0%{
+background-position:0 0,0 0;
+}
+
+100%{
+background-position:200px 200px,200px 200px;
+}
+}
+
+
+
+section{
+max-width:1200px;
+margin:auto;
+padding:100px 20px;
+}
+
+.section-title{
+text-align:center;
+margin-bottom:60px;
+font-size:34px;
+}
+
+.about p{
+margin-bottom:20px;
+color:#cbd5f5;
+}
+
+.expertise{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+margin-top:40px;
+}
+
+.card{
+background:#1e293b;
+padding:30px;
+border-radius:12px;
+text-align:center;
+transition:0.35s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.card i{
+font-size:30px;
+margin-bottom:15px;
+color:#22c55e;
+}
+
+.projects-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:30px;
+}
+
+.project-card{
+background:#1e293b;
+border-radius:12px;
+padding:25px;
+transition:0.35s;
+}
+
+.project-card:hover{
+transform:translateY(-8px);
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.project-card h3{margin-bottom:10px}
+
+.contact-box{
+text-align:center;
+background:#1e293b;
+padding:40px;
+border-radius:12px;
+}
+
+footer{
+background:#020617;
+padding:30px;
+text-align:center;
+color:#94a3b8;
+}
+
+@keyframes fadeUp{
+0%{opacity:0;transform:translateY(40px)}
+100%{opacity:1;transform:translateY(0)}
+}
+
+.reveal{
+opacity:0;
+transform:translateY(50px);
+transition:1s;
+}
+
+.reveal.active{
+opacity:1;
+transform:translateY(0);
+}
+
+@media(max-width:768px){
+.hero h1{font-size:34px}
+nav ul{display:none}
+}
+
+.logo-svg{
+display:flex;
+align-items:center;
+gap:12px;
+font-size:22px;
+font-weight:700;
+color:white;
+}
+
+.logo-svg svg{
+display:block;
+}
+
+.wave{
+stroke-dasharray:400;
+stroke-dashoffset:400;
+animation:drawWave 2.5s ease forwards;
+}
+
+@keyframes drawWave{
+to{
+stroke-dashoffset:0;
+}
+}
+
+.logo-svg svg{
+filter:drop-shadow(0 0 6px rgba(255,255,255,0.3));
+}
+
+
+
+
+
+.hero-logo{
+display:flex;
+flex-direction:column;
+align-items:center;
+margin-bottom:40px;
+position:relative;
+}
+
+/* energy glow */
+
+.energy-core{
+position:absolute;
+width:160px;
+height:160px;
+border-radius:50%;
+background:radial-gradient(circle,#facc15,#facc1520 70%);
+filter:blur(40px);
+animation:corePulse 4s infinite ease-in-out;
+}
+
+/* svg */
+
+.hero-logo svg{
+width:160px;
+height:160px;
+position:relative;
+z-index:2;
+}
+
+/* circle */
+
+.logo-circle{
+fill:none;
+stroke:#facc15;
+stroke-width:18;
+stroke-dasharray:800;
+stroke-dashoffset:800;
+animation:circleDraw 1.6s ease forwards;
+}
+
+/* line */
+
+.logo-line{
+stroke:white;
+stroke-width:12;
+stroke-linecap:round;
+stroke-dasharray:300;
+stroke-dashoffset:300;
+animation:lineDraw 1s ease forwards;
+animation-delay:1.3s;
+}
+
+/* wave */
+
+.logo-wave{
+fill:none;
+stroke:white;
+stroke-width:12;
+stroke-linecap:round;
+stroke-dasharray:500;
+stroke-dashoffset:500;
+animation:waveDraw 2s ease forwards;
+animation-delay:1.8s;
+}
+
+/* electric pulse */
+
+.pulse{
+fill:#facc15;
+opacity:0;
+animation:pulseTravel 2s linear infinite;
+animation-delay:2.8s;
+}
+
+/* AuMi text */
+
+.logo-name{
+margin-top:18px;
+font-size:40px;
+font-weight:700;
+letter-spacing:3px;
+opacity:0;
+animation:textReveal 1.5s forwards;
+animation-delay:2.8s;
+background:linear-gradient(90deg,#facc15,#fde047);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+/* animations */
+
+@keyframes circleDraw{
+to{stroke-dashoffset:0;}
+}
+
+@keyframes lineDraw{
+to{stroke-dashoffset:0;}
+}
+
+@keyframes waveDraw{
+to{stroke-dashoffset:0;}
+}
+
+@keyframes textReveal{
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* glowing core */
+
+@keyframes corePulse{
+
+0%{
+transform:scale(0.9);
+opacity:.6;
+}
+
+50%{
+transform:scale(1.2);
+opacity:1;
+}
+
+100%{
+transform:scale(0.9);
+opacity:.6;
+}
+
+}
+
+/* pulse traveling across wave */
+
+@keyframes pulseTravel{
+
+0%{
+opacity:1;
+transform:translateX(0);
+}
+
+100%{
+opacity:0;
+transform:translateX(180px);
+}
+
+}
+
+.hero-logo svg{
+filter:drop-shadow(0 0 12px rgba(255,200,0,0.4));
+}
+
+
+.particles{
+position:absolute;
+width:100%;
+height:100%;
+top:0;
+left:0;
+background-image:
+radial-gradient(#22c55e 1px, transparent 1px),
+radial-gradient(#22c55e 1px, transparent 1px);
+background-size:80px 80px;
+opacity:0.2;
+animation:particleMove 20s linear infinite;
+}
+
+@keyframes particleMove{
+from{
+background-position:0 0,0 0;
+}
+to{
+background-position:200px 200px,200px 200px;
+}
+}
+
+
+</style>
 </head>
+
 <body>
-  <header>
-    <img src="aumi_logo_grey.png" alt="Logo" style="height: 100px; width: 310px; object-fit: cover;">
-    <div>
-    <h1>AuMi Robotics and Mobility Solutions</h1>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </nav>
-	</div>
-  </header>
 
-  <section id="about">
-    <h2>About AuMi</h2>
-    <p>AuMi Robotics and Mobility Solutions (ARMS) delivers innovative industrial automation and electric mobility solutions. We specialize in the development of advanced EV control systems—including inverters, Battery Management Systems (BMS), and DC–DC converters—backed by deep expertise in embedded software, power electronics, automotive systems engineering and AUTOSAR Base-software.</p>
-	
-	<p>AuMi Robotics and Mobility Solutions (ARMS) is an engineering-focused company dedicated to industrial automation and electric mobility technologies. Our core offerings include the design and development of electric vehicle control units such as inverters, Battery Management Systems (BMS), and DC–DC converters.</p>
+<header>
+<nav>
 
-	<p>With strong capabilities in embedded software development across diverse microcontroller architectures, automotive communication protocols (CAN, Ethernet, I²C, SPI), power electronics, and system-level automotive engineering, ARMS delivers reliable, scalable, and future-ready solutions for modern mobility and industrial applications.</p>
 
-	<h4>Our Expertise Includes:</h4>
-	  <ul>
-		<li>Industrial Automation Solutions</a></li>
-		<li>Electric Vehicle Control Units (Inverter, BMS, DC–DC Converter)</a></li>
-		<li>Embedded Software Development (Multi-MCU Architectures)</a></li>
-		<li>Communication Protocols: CAN, Ethernet, I²C, SPI</a></li>
-		<li>Power Electronics & Circuit Design</a></li>
-		<li>Automotive Systems Engineering</a></li>
-		<li>AUTOSAR Base-software</a></li>
-	  </ul>
-  </section>
+<div class="logo-svg">
 
-  <section id="projects">
-    <h2>Projects</h2>
-	
-	<div class="project">
-	<h3>Home Inverter</h3>
-	<p>An inverter provides power backup for mains-based appliances in the event of a power failure. Here we designed a simple sine wave inverter circuit that produces 50Hz quasi-sine wave output using a single IC CD4047 and some discrete components, which makes it a very cost-effective solution.</p>
-	</div>
-	
-    <div class="project">
-      <h3>AuMi Radiance eBike</h3>
-      <p>Building the eBike prototype with the customized frame design, Battery pack, BMS Control unit, DC Motor, and motor control. Details of the project and the references are provided in the below links</p>
-	  
-	  <h3>Electric bike sub modules</h3>
-	  <ul>
-		<li><a href="pages/ECU_Architecture.html" target="_blank" rel="noopener noreferrer">ECU Architecture</a></li>
-		<li><a href="pages/Electric_motor.html" target="_blank" rel="noopener noreferrer">Electric motor</a></li>
-		<li><a href="pages/Motor_Control.html" target="_blank" rel="noopener noreferrer">Motor Control</a></li>
-		<li><a href="pages/E_Bike_frame.html" target="_blank" rel="noopener noreferrer">E Bike frame</a></li>
-		<li><a href="pages/Battery.html" target="_blank" rel="noopener noreferrer">Battery</a></li>
-		<li><a href="pages/BMS.html" target="_blank" rel="noopener noreferrer">BMS</a></li>
-		<li><a href="pages/Sensors.html" target="_blank" rel="noopener noreferrer">Sensors</a></li>
-	  </ul>
-  
-      <a href="https://github.com/yourusername/project" target="_blank">View on GitHub</a>
-    </div>
-    <!-- Add more projects as needed -->
-  </section>
+<svg viewBox="0 0 300 300" width="60" height="60">
 
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>Email: <a href="mailto:aumitechnologies@gmail.com">aumitechnologies@gmail.com</a></p>
-    <p>LinkedIn / Twitter / GitHub links here</p>
-  </section>
+<!-- Yellow Circle -->
+<circle cx="150" cy="150" r="140" fill="#f4b400"/>
 
-  <footer>
-    <p>&copy; 2025 AuMi. All rights reserved.</p>
-  </footer>
+<!-- Horizontal line -->
+<line x1="40" y1="150" x2="260" y2="150"
+stroke="white"
+stroke-width="14"
+stroke-linecap="round"/>
+
+<!-- Sine Wave -->
+<path class="wave"
+d="M60 150
+C90 60, 120 60, 150 150
+S210 240, 240 150"
+fill="none"
+stroke="white"
+stroke-width="14"
+stroke-linecap="round"/>
+
+</svg>
+
+<span>AuMi</span>
+
+</div>
+
+
+
+<ul>
+<li><a href="#about">About</a></li>
+<li><a href="#expertise">Expertise</a></li>
+<li><a href="#projects">Projects</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+</nav>
+</header>
+
+<!-- HERO Section start -->
+
+<section class="hero">
+
+<div class="glow"></div>
+<div class="circuit-lines"></div>
+<div class="particles"></div>
+<div class="hero-content">
+
+
+<div class="hero-logo">
+
+<div class="energy-core"></div>
+
+<svg viewBox="0 0 300 300">
+
+<circle class="logo-circle" cx="150" cy="150" r="120"/>
+
+<line class="logo-line"
+x1="60" y1="150"
+x2="240" y2="150"/>
+
+<path class="logo-wave"
+d="M70 150 C100 70,130 70,160 150 S220 230,250 150"/>
+
+<circle class="pulse" cx="70" cy="150" r="6"/>
+
+</svg>
+
+<h2 class="logo-name">AuMi</h2>
+
+</div>
+
+
+
+<h1>
+Engineering the Future of 
+<span>Electric Mobility</span> & Robotics
+</h1>
+
+<p>
+Advanced embedded systems, EV control units, and industrial automation solutions for the next generation of intelligent machines.
+</p>
+
+<div class="hero-buttons">
+<a class="btn-primary" href="#projects">Explore Projects</a>
+<a class="btn-secondary" href="#contact">Contact Us</a>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- HERO Section END -->
+
+
+
+
+<section id="about" class="about reveal">
+<h2 class="section-title">About AuMi</h2>
+<p>AuMi Robotics and Mobility Solutions develops advanced technologies for electric mobility and industrial automation. Our engineering expertise spans embedded systems, power electronics, and automotive control systems. We specialize in the design and development of EV control units including inverters, battery management systems, DC‑DC converters, and intelligent automation platforms.</p>
+
+<p>With deep expertise in embedded software development across multiple microcontroller architectures, automotive communication protocols (CAN, Ethernet, I²C, SPI), power electronics, and system-level automotive engineering, AuMi delivers reliable, scalable, and future-ready solutions for modern mobility and industrial applications. Our capabilities also include AUTOSAR-based software development, enabling robust and standardized automotive systems.</p>
+
+</section>
+
+<section id="expertise" class="reveal">
+<h2 class="section-title">Our Expertise</h2>
+
+<div class="expertise">
+
+<div class="card">
+<i class="fas fa-robot"></i>
+<h3>Industrial Automation</h3>
+<p>Robotics and automation systems for modern industry.</p>
+</div>
+
+<div class="card">
+<i class="fas fa-car-battery"></i>
+<h3>EV Control Systems</h3>
+<p>BMS, inverters, motor controllers and vehicle ECUs.</p>
+</div>
+
+<div class="card">
+<i class="fas fa-microchip"></i>
+<h3>Embedded Software</h3>
+<p>Advanced embedded firmware across multi‑MCU architectures.</p>
+</div>
+
+<div class="card">
+<i class="fas fa-network-wired"></i>
+<h3>Automotive Networks</h3>
+<p>CAN, Ethernet, SPI, I2C communication stacks.</p>
+</div>
+
+<div class="card">
+<i class="fas fa-bolt"></i>
+<h3>Power Electronics</h3>
+<p>Design of high‑efficiency power conversion systems.</p>
+</div>
+
+<div class="card">
+<i class="fas fa-cogs"></i>
+<h3>System Engineering</h3>
+<p>Architecture, integration and AUTOSAR platforms.</p>
+</div>
+
+</div>
+</section>
+
+<section id="projects" class="reveal">
+<h2 class="section-title">Projects</h2>
+
+<div class="projects-grid">
+
+<div class="project-card">
+<h3>Home Inverter</h3>
+<p>Design of cost‑efficient sine wave inverter using CD4047 based architecture for home backup systems.</p>
+</div>
+
+<div class="project-card">
+<h3>Power Transformer</h3>
+<p>Design and manufacturing of step‑up and step‑down transformers for UPS, SMPS and power electronics systems.</p>
+</div>
+
+<div class="project-card">
+<h3>AuMi Radiance eBike</h3>
+<p>Prototype electric bike with custom frame, battery pack, BMS and motor control system.</p>
+</div>
+
+</div>
+</section>
+
+<section id="contact" class="reveal">
+<h2 class="section-title">Contact Us</h2>
+
+<div class="contact-box">
+<p>Email: jayaprakash@aumitechnologies.com</p>
+
+<div class="social-links">
+
+<a href="https://www.linkedin.com/company/aumi-robotics" target="_blank">
+<i class="fab fa-linkedin"></i>
+</a>
+
+<a href="https://github.com/kovaiprakash" target="_blank">
+<i class="fab fa-github"></i>
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+<p>© 2025 AuMi Robotics and Mobility Solutions</p>
+</footer>
+
+<script>
+
+function reveal(){
+var reveals=document.querySelectorAll(".reveal");
+
+for(var i=0;i<reveals.length;i++){
+var windowHeight=window.innerHeight;
+var elementTop=reveals[i].getBoundingClientRect().top;
+var elementVisible=100;
+
+if(elementTop<windowHeight-elementVisible){
+reveals[i].classList.add("active");
+}
+}
+}
+
+window.addEventListener("scroll",reveal);
+
+</script>
+
 </body>
 </html>
