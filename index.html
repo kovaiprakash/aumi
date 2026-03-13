@@ -581,6 +581,64 @@ height:300px;
 }
 
 
+/* Dropdown */
+
+nav ul li{
+position:relative;
+}
+
+nav ul li{
+padding-bottom:8px;
+}
+
+.dropdown-menu{
+display:none;
+position:absolute;
+top:100%;            /* attach directly below parent */
+top:40px;
+left:0;
+background:#1e293b;
+border-radius:8px;
+padding:10px 0;
+min-width:200px;
+flex-direction:column;
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+.dropdown-menu{
+opacity:0;
+visibility:hidden;
+transform:translateY(10px);
+transition:all .25s ease;
+}
+
+.dropdown:hover .dropdown-menu{
+opacity:1;
+visibility:visible;
+transform:translateY(0);
+}
+
+.dropdown-menu li{
+margin:0;
+}
+
+.dropdown-menu a{
+display:block;
+padding:10px 20px;
+white-space:nowrap;
+}
+
+.dropdown-menu a:hover{
+background:#0f172a;
+color:#22c55e;
+}
+
+/* Show dropdown */
+
+.dropdown:hover .dropdown-menu{
+display:block;
+}
+
 
 </style>
 </head>
@@ -623,11 +681,40 @@ stroke-linecap="round"/>
 
 
 <ul>
+
 <li><a href="#about">About</a></li>
+
 <li><a href="#expertise">Expertise</a></li>
+
 <li><a href="#projects">Projects</a></li>
-<li><a href="#contact">Contact</a></li>
+
+<li class="dropdown">
+<a href="#">Products <i class="fas fa-caret-down"></i></a>
+
+<ul class="dropdown-menu">
+<li><a href="products/power-transformers.html">Power Transformers</a></li>
+<li><a href="products/inverters.html">Inverters</a></li>
+<li><a href="products/dcdc-converters.html">DC-DC Converters</a></li>
+<li><a href="products/power-supply-unit.html">Power Supply Unit</a></li>
 </ul>
+
+</li>
+
+<li class="dropdown">
+<a href="#">Services <i class="fas fa-caret-down"></i></a>
+
+<ul class="dropdown-menu">
+<li><a href="services/embedded-software.html">Embedded Software</a></li>
+<li><a href="services/project-consultancy.html">Project Consultancy</a></li>
+</ul>
+
+</li>
+
+<li><a href="#contact">Contact</a></li>
+
+</ul>
+
+
 </nav>
 </header>
 
