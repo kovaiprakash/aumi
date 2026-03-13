@@ -640,6 +640,48 @@ display:block;
 }
 
 
+.menu-toggle{
+display:none;
+font-size:26px;
+color:white;
+cursor:pointer;
+}
+
+/* Mobile navigation */
+
+@media(max-width:768px){
+
+.menu-toggle{
+display:block;
+}
+
+nav{
+position:relative;
+}
+
+nav ul{
+position:absolute;
+top:70px;
+left:0;
+width:100%;
+background:#0f172a;
+flex-direction:column;
+align-items:center;
+display:none;
+padding:20px 0;
+}
+
+nav ul li{
+margin:15px 0;
+}
+
+nav ul.show{
+display:flex;
+}
+
+}
+
+
 </style>
 </head>
 
@@ -678,7 +720,9 @@ stroke-linecap="round"/>
 
 </div>
 
-
+<div class="menu-toggle">
+<i class="fas fa-bars"></i>
+</div>
 
 <ul>
 
@@ -989,6 +1033,14 @@ reveals[i].classList.add("active");
 }
 
 window.addEventListener("scroll",reveal);
+
+const toggle = document.querySelector(".menu-toggle");
+const navMenu = document.querySelector("nav ul");
+
+toggle.addEventListener("click", () => {
+navMenu.classList.toggle("show");
+});
+
 
 </script>
 
