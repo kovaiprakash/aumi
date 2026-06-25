@@ -1,1 +1,414 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eBike Control Unit | AuMi Projects</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:#020617;color:#e5e7eb;line-height:1.6}
+:root{--green:#22c55e;--green-dim:#16a34a;--amber:#f59e0b;--navy:#0f172a;--deep:#020617;--slate:#1e293b;--muted:#64748b;--sub:#94a3b8;--mono:'Space Mono',monospace}
 
+header{position:fixed;width:100%;top:0;background:rgba(2,6,23,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(34,197,94,.12);z-index:2000}
+nav{max-width:1280px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:12px 24px}
+.logo-a{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-a span{font-size:20px;font-weight:700;color:white}
+.nav-r{display:flex;align-items:center;gap:10px}
+.nav-back{display:inline-flex;align-items:center;gap:7px;color:var(--sub);font-size:13px;text-decoration:none;padding:8px 14px;border-radius:7px;transition:.2s}
+.nav-back:hover{color:var(--green);background:rgba(34,197,94,.07)}
+.nav-cta{background:var(--green);color:white;padding:9px 20px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;transition:.2s}
+.nav-cta:hover{background:var(--green-dim)}
+
+/* HERO */
+.hero{padding:130px 24px 80px;background:linear-gradient(160deg,#020617,#061220 50%,#020617);position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(90deg,rgba(34,197,94,.04) 1px,transparent 1px),linear-gradient(rgba(34,197,94,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-inner{max-width:1280px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:2}
+.breadcrumb{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:20px}
+.breadcrumb a{color:var(--muted);text-decoration:none}.breadcrumb a:hover{color:var(--green)}.breadcrumb .cur{color:var(--green)}
+.hero-tag{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-size:clamp(28px,4vw,50px);font-weight:700;line-height:1.15;margin-bottom:16px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--green),#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-desc{color:var(--sub);font-size:15px;line-height:1.8;margin-bottom:28px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.chip{font-family:var(--mono);font-size:10px;letter-spacing:.5px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:5px 12px;border-radius:4px}
+.chip.amber{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2);color:var(--amber)}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-p{background:var(--green);color:white;padding:12px 26px;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none;transition:.25s;display:inline-flex;align-items:center;gap:7px}
+.btn-p:hover{background:var(--green-dim);transform:translateY(-2px)}
+.btn-o{border:1.5px solid rgba(255,255,255,.18);padding:11px 22px;border-radius:8px;color:var(--text);font-size:14px;text-decoration:none;transition:.25s;display:inline-flex;align-items:center;gap:7px}
+.btn-o:hover{border-color:var(--green);color:var(--green)}
+
+/* hero visual */
+.hero-visual{background:var(--slate);border-radius:16px;border:1px solid rgba(34,197,94,.15);overflow:hidden;position:relative}
+.hero-visual img{width:100%;display:block;opacity:.85}
+.hero-visual-overlay{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(2,6,23,.9))}
+.hvo-title{font-size:13px;font-weight:600;color:white}
+.hvo-sub{font-size:11px;color:var(--sub)}
+
+/* SECTIONS */
+.section{max-width:1280px;margin:auto;padding:80px 24px}
+.sec-label{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:10px}
+.sec-title{font-size:clamp(22px,3vw,34px);font-weight:700;margin-bottom:12px}
+.sec-sub{color:var(--sub);font-size:15px;max-width:560px;margin-bottom:44px;line-height:1.7}
+
+/* two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.prose p{color:var(--sub);font-size:14px;line-height:1.8;margin-bottom:14px}
+
+/* activity cards */
+.act-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.act-card{background:var(--slate);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:24px;transition:.3s;border-left:3px solid var(--green)}
+.act-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.act-card i{color:var(--green);font-size:20px;margin-bottom:12px}
+.act-card h3{font-size:14px;font-weight:600;margin-bottom:7px}
+.act-card p{color:var(--sub);font-size:12px;line-height:1.6}
+
+/* outcome list */
+.outcome-list{display:flex;flex-direction:column;gap:12px}
+.outcome-item{display:flex;align-items:flex-start;gap:12px;background:var(--slate);border-radius:10px;padding:18px;border:1px solid rgba(255,255,255,.06)}
+.outcome-icon{width:36px;height:36px;border-radius:8px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);display:flex;align-items:center;justify-content:center;color:var(--green);flex-shrink:0;font-size:14px}
+.outcome-item h4{font-size:13px;font-weight:600;margin-bottom:3px}
+.outcome-item p{color:var(--sub);font-size:12px;line-height:1.5}
+
+/* GANTT */
+.gantt-wrap{overflow-x:auto;background:var(--slate);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:32px}
+.gantt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.gantt-header h3{font-size:17px;font-weight:600}
+.today-badge{font-family:var(--mono);font-size:10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;padding:4px 10px;border-radius:4px}
+.gantt-table{min-width:900px;width:100%}
+.gantt-months{display:flex;background:#0a0f1e;border-radius:8px 8px 0 0}
+.g-cell-label{width:220px;flex-shrink:0;padding:10px 12px;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
+.g-month{flex:1;text-align:center;padding:10px 4px;font-family:var(--mono);font-size:10px;color:var(--muted)}
+.gantt-row{display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,.04);min-height:38px}
+.gantt-row:last-child{border-bottom:none}
+.g-label{width:220px;flex-shrink:0;padding:8px 12px;font-size:12px;color:#e2e8f0;font-weight:500}
+.g-track{flex:1;position:relative;height:38px;display:flex;align-items:center}
+.g-bar{height:14px;border-radius:7px;background:rgba(56,189,248,.25);border:1px solid rgba(56,189,248,.4);position:absolute}
+.g-bar.done{background:rgba(34,197,94,.2);border-color:rgba(34,197,94,.4)}
+.g-milestone{position:absolute;width:12px;height:12px;transform:rotate(45deg);top:50%;margin-top:-6px}
+.g-milestone.blue{background:#38bdf8;border:1px solid #0ea5e9}
+.g-milestone.amber{background:var(--amber);border:1px solid var(--amber-dim)}
+.g-milestone.green{background:var(--green);border:1px solid var(--green-dim)}
+.g-now{position:absolute;top:0;bottom:0;width:2px;background:rgba(248,113,113,.7);z-index:5}
+.g-now-label{position:absolute;top:-18px;left:-20px;font-family:var(--mono);font-size:9px;color:#f87171;white-space:nowrap}
+.milestone-legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px;font-size:12px;color:var(--sub)}
+.ml-item{display:flex;align-items:center;gap:7px}
+.ml-dot{width:10px;height:10px;transform:rotate(45deg)}
+
+/* CTA */
+.cta-band{background:linear-gradient(135deg,rgba(34,197,94,.07),rgba(245,158,11,.04));border-top:1px solid rgba(34,197,94,.12);border-bottom:1px solid rgba(34,197,94,.12);padding:70px 24px}
+.cta-inner{max-width:1280px;margin:auto;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center}
+.cta-inner h2{font-size:clamp(20px,2.5vw,30px);font-weight:700;margin-bottom:8px}
+.cta-inner p{color:var(--sub);font-size:14px}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap;flex-shrink:0}
+
+footer{background:var(--deep);border-top:1px solid rgba(255,255,255,.06);padding:24px;text-align:center;color:var(--muted);font-size:13px}
+footer a{color:var(--muted);text-decoration:none}.footer a:hover{color:var(--green)}
+
+.reveal{opacity:0;transform:translateY(28px);transition:.7s ease}
+.reveal.active{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){.hero-inner,.two-col{grid-template-columns:1fr}.cta-inner{grid-template-columns:1fr}}
+@media(max-width:600px){.hero-visual{display:none}}
+</style>
+</head>
+<body>
+
+<header>
+<nav>
+  <a class="logo-a" href="../index.html">
+    <svg viewBox="0 0 300 300" width="42" height="42"><circle cx="150" cy="150" r="140" fill="#f4b400"/><line x1="40" y1="150" x2="260" y2="150" stroke="white" stroke-width="14" stroke-linecap="round"/><path d="M60 150 C90 60,120 60,150 150 S210 240,240 150" fill="none" stroke="white" stroke-width="14" stroke-linecap="round"/></svg>
+    <span>AuMi</span>
+  </a>
+  <div class="nav-r">
+    <a class="nav-back" href="../index.html#projects"><i class="fas fa-arrow-left"></i> All Projects</a>
+    <a class="nav-cta" href="../index.html#enquiry">Get in Touch</a>
+  </div>
+</nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="breadcrumb">
+        <a href="../index.html">AuMi</a>
+        <i class="fas fa-chevron-right" style="font-size:9px"></i>
+        <a href="../index.html#projects">Projects</a>
+        <i class="fas fa-chevron-right" style="font-size:9px"></i>
+        <span class="cur">eBike Control Unit</span>
+      </div>
+      <div class="hero-tag">Project 01 · Active Development</div>
+      <h1>eBike <em>Control Unit</em><br>Design & Development</h1>
+      <p class="hero-desc">High-performance embedded ECU based on STM32 ARM Cortex-M4 with advanced FOC motor control, BMS integration, vehicle communication and full production-ready software architecture.</p>
+      <div class="hero-chips">
+        <span class="chip">STM32 Cortex-M4</span>
+        <span class="chip">FOC / SVPWM</span>
+        <span class="chip">BLDC / PMSM</span>
+        <span class="chip amber">Active · 2026</span>
+        <span class="chip">CAN Bus</span>
+        <span class="chip">OTA Ready</span>
+      </div>
+      <div class="hero-btns">
+        <a class="btn-p" href="#roadmap"><i class="fas fa-road"></i> View Roadmap</a>
+        <a class="btn-o" href="../index.html#enquiry"><i class="fas fa-envelope"></i> Enquire</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="eBike ECU">
+      <div class="hero-visual-overlay">
+        <div class="hvo-title">STM32 ARM Cortex-M4 Controller Platform</div>
+        <div class="hvo-sub">Motor control · BMS · Diagnostics · OTA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section class="section reveal">
+  <div class="two-col">
+    <div>
+      <div class="sec-label">Project Overview</div>
+      <h2 class="sec-title">What we're building</h2>
+      <div class="prose">
+        <p>AuMi's eBike Control Unit project delivers a production-grade ECU platform centred on the STM32 ARM Cortex-M4 — one of the most capable embedded controllers for real-time motor drive applications. The system integrates advanced Field-Oriented Control (FOC) algorithms for BLDC and PMSM motors, providing smooth, efficient torque delivery across the full operating range.</p>
+        <p>The ECU integrates battery management, charger control, display interfaces and sensor fusion in a single, compact hardware design. Vehicle communication and diagnostics are implemented using CAN bus and standard automotive protocols, enabling fleet-level monitoring and OTA firmware upgrades.</p>
+        <p>The project scope covers hardware architecture, embedded software, motor control algorithm tuning, system integration and complete vehicle-level validation — producing a scalable controller platform suitable for multiple vehicle categories.</p>
+      </div>
+    </div>
+    <div>
+      <div class="outcome-list">
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-bolt"></i></div><div><h4>High-Efficiency Motor Control</h4><p>Advanced FOC with SVPWM minimises switching losses and maximises range per charge cycle.</p></div></div>
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-tachometer-alt"></i></div><div><h4>Improved Range & Ride Performance</h4><p>Optimised torque maps and regenerative braking strategies extend operational range significantly.</p></div></div>
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-layer-group"></i></div><div><h4>Scalable Controller Platform</h4><p>Modular hardware and software architecture scales across light cargo, commuter and performance vehicle categories.</p></div></div>
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-shield-alt"></i></div><div><h4>Production-Ready Architecture</h4><p>Safety-critical embedded software with fault protection, watchdog management and fail-safe degradation modes.</p></div></div>
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-clock"></i></div><div><h4>Reduced Future Dev Time</h4><p>Reusable BSP, driver libraries and control framework cut time-to-market for next vehicle platforms.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEY ACTIVITIES -->
+<section class="section reveal" style="padding-top:0">
+  <div class="sec-label">Key Activities</div>
+  <h2 class="sec-title">Engineering Scope</h2>
+  <p class="sec-sub">Seven parallel engineering tracks covering hardware, software, integration and validation.</p>
+  <div class="act-grid">
+    <div class="act-card"><i class="fas fa-microchip"></i><h3>Embedded Controller Architecture</h3><p>STM32 ARM Cortex-M4 hardware design, MCU selection, peripheral mapping and PCB architecture for the control unit.</p></div>
+    <div class="act-card"><i class="fas fa-sync-alt"></i><h3>BLDC/PMSM Motor Control</h3><p>FOC algorithm implementation with SVPWM, current regulation loops, speed and position estimation using sensorless techniques.</p></div>
+    <div class="act-card"><i class="fas fa-battery-three-quarters"></i><h3>Battery & Charger Integration</h3><p>BMS communication, state-of-charge estimation, cell balancing interface, charger control and thermal management.</p></div>
+    <div class="act-card"><i class="fas fa-network-wired"></i><h3>Vehicle Communication & Diagnostics</h3><p>CAN bus implementation, display protocol integration, OBD-style diagnostics and OTA firmware update support.</p></div>
+    <div class="act-card"><i class="fas fa-shield-alt"></i><h3>Safety, Reliability & Fault Protection</h3><p>Overcurrent, overvoltage, thermal and rotor-lock protection with watchdog supervision and fail-safe response.</p></div>
+    <div class="act-card"><i class="fas fa-sliders-h"></i><h3>Vehicle Performance Optimisation</h3><p>Ride-mode calibration, torque map tuning, regenerative braking configuration and real-world range validation.</p></div>
+    <div class="act-card"><i class="fas fa-car-battery"></i><h3>eBike System Integration</h3><p>Complete electrical and mechanical system integration — wiring harness, connector design and vehicle-level validation.</p></div>
+  </div>
+</section>
+
+<!-- ROADMAP GANTT -->
+<section class="section reveal" id="roadmap" style="padding-top:0">
+  <div class="sec-label">Development Timeline</div>
+  <h2 class="sec-title">eBike ECU Roadmap</h2>
+  <p class="sec-sub">Milestone plan from Mar 2026 through SOP in 2027. Current date marked in red.</p>
+
+  <div class="gantt-wrap">
+    <div class="gantt-header">
+      <h3><i class="fas fa-road" style="color:var(--green);margin-right:8px"></i>eBike ECU Milestone Plan</h3>
+      <span class="today-badge">Current Date: Jun 2026</span>
+    </div>
+    <div class="gantt-table">
+      <!-- Month headers -->
+      <div class="gantt-months">
+        <div class="g-cell-label">Activity</div>
+        <div class="g-month">Mar-26</div><div class="g-month">May-26</div>
+        <div class="g-month">Jul-26</div><div class="g-month">Sep-26</div>
+        <div class="g-month">Nov-26</div><div class="g-month">Jan-27</div>
+        <div class="g-month">Mar-27</div><div class="g-month">May-27</div>
+        <div class="g-month">Jul-27</div><div class="g-month">Sep-27</div>
+      </div>
+      <!-- Each row: label + SVG bar track -->
+      <style>
+      .g-row{display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,.04);min-height:40px}
+      .g-row:last-child{border-bottom:none}
+      .g-lbl{width:220px;flex-shrink:0;padding:8px 12px;font-size:12px;color:#e2e8f0;font-weight:500}
+      .g-svg{flex:1;height:40px;position:relative}
+      .g-svg svg{width:100%;height:40px}
+      </style>
+
+      <!-- 10 months = Mar26→Sep27, 19 months total. We map 0–100% across 10 columns each = 10% per column
+           Mar26=0%, May26=20%, Jul26=40%, Sep26=50%, Nov26=60%, Jan27=70%, Mar27=80%, May27=87%, Jul27=93%, Sep27=100%
+           Approx mapping (each month ~5.26%): now=Jun26≈35%
+      -->
+
+      <div class="g-row">
+        <div class="g-lbl">Requirement Definition</div>
+        <div class="g-svg">
+          <svg viewBox="0 0 700 40" preserveAspectRatio="none">
+            <line x1="245" y1="0" x2="245" y2="40" stroke="rgba(248,113,113,.6)" stroke-width="1.5"/>
+            <rect x="0" y="13" width="280" height="14" rx="7" fill="rgba(34,197,94,.18)" stroke="rgba(34,197,94,.4)" stroke-width="1"/>
+            <!-- Requirement Freeze @ Jul26 = 40% = 280px -->
+            <polygon points="276,10 282,20 276,30 270,20" fill="#38bdf8" stroke="#0ea5e9" stroke-width="1"/>
+            <text x="286" y="24" font-size="9" fill="#94a3b8" font-family="monospace">Req Freeze</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="g-row">
+        <div class="g-lbl">System Architecture & Design</div>
+        <div class="g-svg">
+          <svg viewBox="0 0 700 40" preserveAspectRatio="none">
+            <line x1="245" y1="0" x2="245" y2="40" stroke="rgba(248,113,113,.6)" stroke-width="1.5"/>
+            <rect x="70" y="13" width="290" height="14" rx="7" fill="rgba(34,197,94,.18)" stroke="rgba(34,197,94,.4)" stroke-width="1"/>
+            <!-- Architecture freeze @ Sep26 = 50% = 350px -->
+            <polygon points="356,10 362,20 356,30 350,20" fill="#38bdf8" stroke="#0ea5e9" stroke-width="1"/>
+            <text x="366" y="24" font-size="9" fill="#94a3b8" font-family="monospace">Arch Freeze</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="g-row">
+        <div class="g-lbl">Hardware Development</div>
+        <div class="g-svg">
+          <svg viewBox="0 0 700 40" preserveAspectRatio="none">
+            <line x1="245" y1="0" x2="245" y2="40" stroke="rgba(248,113,113,.6)" stroke-width="1.5"/>
+            <rect x="70" y="13" width="490" height="14" rx="7" fill="rgba(56,189,248,.15)" stroke="rgba(56,189,248,.35)" stroke-width="1"/>
+            <!-- A-Sample @ Sep26 = 350 -->
+            <polygon points="346,10 352,20 346,30 340,20" fill="#38bdf8" stroke="#0ea5e9" stroke-width="1"/>
+            <text x="356" y="24" font-size="9" fill="#94a3b8" font-family="monospace">A-Sample</text>
+            <!-- D-Sample Final HW @ Mar27 = 80% = 560 -->
+            <polygon points="556,10 562,20 556,30 550,20" fill="#38bdf8" stroke="#0ea5e9" stroke-width="1"/>
+            <text x="566" y="24" font-size="9" fill="#94a3b8" font-family="monospace">D-Sample</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="g-row">
+        <div class="g-lbl">Software & FOC Development</div>
+        <div class="g-svg">
+          <svg viewBox="0 0 700 40" preserveAspectRatio="none">
+            <line x1="245" y1="0" x2="245" y2="40" stroke="rgba(248,113,113,.6)" stroke-width="1.5"/>
+            <rect x="70" y="13" width="560" height="14" rx="7" fill="rgba(34,197,94,.18)" stroke="rgba(34,197,94,.4)" stroke-width="1"/>
+            <!-- V100@May26=140, V200@Jul26=280, V300@Sep26=350, V400@Nov26=420, V500@Jan27=490 -->
+            <polygon points="136,10 142,20 136,30 130,20" fill="#22c55e" stroke="#16a34a" stroke-width="1"/>
+            <text x="146" y="24" font-size="9" fill="#4ade80" font-family="monospace">V100</text>
+            <polygon points="276,10 282,20 276,30 270,20" fill="#22c55e" stroke="#16a34a" stroke-width="1"/>
+            <text x="286" y="24" font-size="9" fill="#4ade80" font-family="monospace">V200</text>
+            <polygon points="346,10 352,20 346,30 340,20" fill="#22c55e" stroke="#16a34a" stroke-width="1"/>
+            <text x="356" y="24" font-size="9" fill="#4ade80" font-family="monospace">V300</text>
+            <polygon points="416,10 422,20 416,30 410,20" fill="#22c55e" stroke="#16a34a" stroke-width="1"/>
+            <text x="426" y="24" font-size="9" fill="#4ade80" font-family="monospace">V400</text>
+            <polygon points="486,10 492,20 486,30 480,20" fill="#22c55e" stroke="#16a34a" stroke-width="1"/>
+            <text x="496" y="24" font-size="9" fill="#4ade80" font-family="monospace">V500</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="g-row">
+        <div class="g-lbl">Development Lab Setup</div>
+        <div class="g-svg">
+          <svg viewBox="0 0 700 40" preserveAspectRatio="none">
+            <line x1="245" y1="0" x2="245" y2="40" stroke="rgba(248,113,113,.6)" stroke-width="1.5"/>
+            <rect x="140" y="13" width="280" height="14" rx="7" fill="rgba(56,189,248,.15)" stroke="rgba(56,189,248,.35)" stroke-width="1"/>
+            <polygon points="146,10 152,20 146,30 140,20" fill="#38bdf8" stroke="#0ea5e9" stroke-width="1"/>
+            <text x="156" y="24" font-size="9" fill="#94a3b8" font-family="monospace">Basic Infra</text>
+            <polygon points="276,10 282,20 276,30 270,20" fill="#38bdf8" stroke="#0ea5e9" stroke-width="1"/>
+            <text x="286" y="24" font-size="9" fill="#94a3b8" font-family="monospace">Lab Complete</text>
+            <polygon points="416,10 422,20 416,30 410,20" fill="#38bdf8" stroke="#0ea5e9" stroke-width="1"/>
+            <text x="426" y="24" font-size="9" fill="#94a3b8" font-family="monospace">Advanced</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="g-row">
+        <div class="g-lbl">Integration & Prototype Build</div>
+        <div class="g-svg">
+          <svg viewBox="0 0 700 40" preserveAspectRatio="none">
+            <line x1="245" y1="0" x2="245" y2="40" stroke="rgba(248,113,113,.6)" stroke-width="1.5"/>
+            <rect x="350" y="13" width="200" height="14" rx="7" fill="rgba(56,189,248,.15)" stroke="rgba(56,189,248,.35)" stroke-width="1"/>
+            <polygon points="416,10 422,20 416,30 410,20" fill="#38bdf8" stroke="#0ea5e9" stroke-width="1"/>
+            <text x="426" y="24" font-size="9" fill="#94a3b8" font-family="monospace">MVP</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="g-row">
+        <div class="g-lbl">Verification & Validation</div>
+        <div class="g-svg">
+          <svg viewBox="0 0 700 40" preserveAspectRatio="none">
+            <line x1="245" y1="0" x2="245" y2="40" stroke="rgba(248,113,113,.6)" stroke-width="1.5"/>
+            <rect x="350" y="13" width="210" height="14" rx="7" fill="rgba(56,189,248,.15)" stroke="rgba(56,189,248,.35)" stroke-width="1"/>
+            <polygon points="556,10 562,20 556,30 550,20" fill="#38bdf8" stroke="#0ea5e9" stroke-width="1"/>
+            <text x="566" y="24" font-size="9" fill="#94a3b8" font-family="monospace">MMP</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="g-row">
+        <div class="g-lbl">Certification & Compliance</div>
+        <div class="g-svg">
+          <svg viewBox="0 0 700 40" preserveAspectRatio="none">
+            <line x1="245" y1="0" x2="245" y2="40" stroke="rgba(248,113,113,.6)" stroke-width="1.5"/>
+            <rect x="420" y="13" width="250" height="14" rx="7" fill="rgba(56,189,248,.15)" stroke="rgba(56,189,248,.35)" stroke-width="1"/>
+            <polygon points="666,10 672,20 666,30 660,20" fill="#38bdf8" stroke="#0ea5e9" stroke-width="1"/>
+            <text x="636" y="35" font-size="9" fill="#94a3b8" font-family="monospace">Cert Complete</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Production milestones row -->
+      <div class="g-row" style="background:rgba(245,158,11,.04)">
+        <div class="g-lbl" style="color:var(--amber);font-weight:600">Production Milestones</div>
+        <div class="g-svg">
+          <svg viewBox="0 0 700 40" preserveAspectRatio="none">
+            <line x1="245" y1="0" x2="245" y2="40" stroke="rgba(248,113,113,.6)" stroke-width="1.5"/>
+            <!-- EvalBoard Jul26=280, Prototype Sep26=350, MVP Nov26=420, MMP Jan27=490, SOP May27=616 -->
+            <polygon points="276,12 284,20 276,28 268,20" fill="#f59e0b" stroke="#d97706" stroke-width="1"/>
+            <text x="250" y="35" font-size="9" fill="#f59e0b" font-family="monospace">EvalBoard</text>
+            <polygon points="346,12 354,20 346,28 338,20" fill="#f59e0b" stroke="#d97706" stroke-width="1"/>
+            <text x="320" y="35" font-size="9" fill="#f59e0b" font-family="monospace">Prototype</text>
+            <polygon points="416,12 424,20 416,28 408,20" fill="#f59e0b" stroke="#d97706" stroke-width="1"/>
+            <text x="400" y="35" font-size="9" fill="#f59e0b" font-family="monospace">MVP</text>
+            <polygon points="486,12 494,20 486,28 478,20" fill="#f59e0b" stroke="#d97706" stroke-width="1"/>
+            <text x="470" y="35" font-size="9" fill="#f59e0b" font-family="monospace">MMP</text>
+            <polygon points="616,12 624,20 616,28 608,20" fill="#22c55e" stroke="#16a34a" stroke-width="1"/>
+            <text x="600" y="35" font-size="9" fill="#22c55e" font-family="monospace">SOP</text>
+          </svg>
+        </div>
+      </div>
+    </div><!-- /gantt-table -->
+
+    <div class="milestone-legend">
+      <div class="ml-item"><div class="ml-dot" style="background:#38bdf8;width:10px;height:10px"></div> Technical Milestone</div>
+      <div class="ml-item"><div class="ml-dot" style="background:#22c55e;width:10px;height:10px"></div> SW Release</div>
+      <div class="ml-item"><div class="ml-dot" style="background:#f59e0b;width:10px;height:10px"></div> Production Milestone</div>
+      <div class="ml-item"><div style="width:2px;height:12px;background:rgba(248,113,113,.7)"></div> Current Date (Jun 2026)</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <div class="cta-inner">
+    <div>
+      <h2>Interested in this platform?</h2>
+      <p>Contact us to discuss integration into your eBike or light EV programme.</p>
+    </div>
+    <div class="cta-btns">
+      <a class="btn-p" href="../index.html#enquiry"><i class="fas fa-paper-plane"></i> Send Enquiry</a>
+      <a class="btn-o" href="aumi-radiance-ebike.html"><i class="fas fa-bicycle"></i> AuMi Radiance eBike</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 AuMi Robotics and Mobility Solutions · <a href="../index.html">Home</a> · <a href="../index.html#projects">Projects</a></p>
+</footer>
+
+<script>
+function reveal(){document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<window.innerHeight-60)el.classList.add('active')})}
+window.addEventListener('scroll',reveal);reveal();
+</script>
+</body>
+</html>

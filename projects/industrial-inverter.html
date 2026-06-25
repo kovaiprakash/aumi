@@ -1,1 +1,309 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Industrial Inverter | AuMi Projects</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:#020617;color:#e5e7eb;line-height:1.6}
+:root{--green:#22c55e;--green-dim:#16a34a;--amber:#f59e0b;--navy:#0f172a;--deep:#020617;--slate:#1e293b;--muted:#64748b;--sub:#94a3b8;--mono:'Space Mono',monospace}
+header{position:fixed;width:100%;top:0;background:rgba(2,6,23,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(34,197,94,.12);z-index:2000}
+nav{max-width:1280px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:12px 24px}
+.logo-a{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-a span{font-size:20px;font-weight:700;color:white}
+.nav-r{display:flex;align-items:center;gap:10px}
+.nav-back{display:inline-flex;align-items:center;gap:7px;color:var(--sub);font-size:13px;text-decoration:none;padding:8px 14px;border-radius:7px;transition:.2s}
+.nav-back:hover{color:var(--green);background:rgba(34,197,94,.07)}
+.nav-cta{background:var(--green);color:white;padding:9px 20px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;transition:.2s}
+.nav-cta:hover{background:var(--green-dim)}
 
+/* HERO with SVG inverter illustration */
+.hero{padding:130px 24px 80px;background:linear-gradient(160deg,#020617,#051020 50%,#020617);position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(90deg,rgba(34,197,94,.04) 1px,transparent 1px),linear-gradient(rgba(34,197,94,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-inner{max-width:1280px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:2}
+.breadcrumb{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:20px}
+.breadcrumb a{color:var(--muted);text-decoration:none}.breadcrumb a:hover{color:var(--green)}.breadcrumb .cur{color:var(--green)}
+.hero-tag{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-size:clamp(28px,4vw,50px);font-weight:700;line-height:1.15;margin-bottom:16px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--green),#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-desc{color:var(--sub);font-size:15px;line-height:1.8;margin-bottom:28px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.chip{font-family:var(--mono);font-size:10px;letter-spacing:.5px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:5px 12px;border-radius:4px}
+.chip.amber{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2);color:var(--amber)}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-p{background:var(--green);color:white;padding:12px 26px;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none;transition:.25s;display:inline-flex;align-items:center;gap:7px}
+.btn-p:hover{background:var(--green-dim);transform:translateY(-2px)}
+.btn-o{border:1.5px solid rgba(255,255,255,.18);padding:11px 22px;border-radius:8px;color:var(--text);font-size:14px;text-decoration:none;transition:.25s;display:inline-flex;align-items:center;gap:7px}
+.btn-o:hover{border-color:var(--green);color:var(--green)}
+
+/* Inverter illustration box */
+.inv-visual{background:var(--slate);border-radius:16px;border:1px solid rgba(34,197,94,.15);padding:32px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.inv-svg-wrap{width:100%;max-width:340px}
+
+.section{max-width:1280px;margin:auto;padding:80px 24px}
+.sec-label{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:10px}
+.sec-title{font-size:clamp(22px,3vw,34px);font-weight:700;margin-bottom:12px}
+.sec-sub{color:var(--sub);font-size:15px;max-width:560px;margin-bottom:44px;line-height:1.7}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.prose p{color:var(--sub);font-size:14px;line-height:1.8;margin-bottom:14px}
+
+.act-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.act-card{background:var(--slate);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:24px;transition:.3s;border-left:3px solid var(--green)}
+.act-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.act-card i{color:var(--green);font-size:20px;margin-bottom:12px}
+.act-card h3{font-size:14px;font-weight:600;margin-bottom:7px}
+.act-card p{color:var(--sub);font-size:12px;line-height:1.6}
+
+.outcome-list{display:flex;flex-direction:column;gap:12px}
+.outcome-item{display:flex;align-items:flex-start;gap:12px;background:var(--slate);border-radius:10px;padding:18px;border:1px solid rgba(255,255,255,.06)}
+.outcome-icon{width:36px;height:36px;border-radius:8px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);display:flex;align-items:center;justify-content:center;color:var(--green);flex-shrink:0;font-size:14px}
+.outcome-item h4{font-size:13px;font-weight:600;margin-bottom:3px}
+.outcome-item p{color:var(--sub);font-size:12px;line-height:1.5}
+
+.roadmap-strip{background:var(--slate);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:32px;margin-top:0}
+.roadmap-steps{display:flex;gap:0;position:relative;margin-top:24px;flex-wrap:wrap}
+.roadmap-steps::before{content:'';position:absolute;top:22px;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),rgba(34,197,94,.2));z-index:0}
+.rs-step{flex:1;min-width:130px;text-align:center;position:relative;z-index:1;padding:0 8px}
+.rs-dot{width:16px;height:16px;border-radius:50%;background:var(--green);border:3px solid var(--deep);margin:14px auto 12px;transition:.3s}
+.rs-dot.future{background:var(--slate);border-color:var(--muted)}
+.rs-step h4{font-size:12px;font-weight:600;margin-bottom:4px}
+.rs-step p{font-size:11px;color:var(--sub)}
+.rs-step .rs-date{font-family:var(--mono);font-size:10px;color:var(--amber);margin-bottom:6px}
+
+.cta-band{background:linear-gradient(135deg,rgba(34,197,94,.07),rgba(245,158,11,.04));border-top:1px solid rgba(34,197,94,.12);border-bottom:1px solid rgba(34,197,94,.12);padding:70px 24px}
+.cta-inner{max-width:1280px;margin:auto;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center}
+.cta-inner h2{font-size:clamp(20px,2.5vw,30px);font-weight:700;margin-bottom:8px}
+.cta-inner p{color:var(--sub);font-size:14px}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap;flex-shrink:0}
+footer{background:var(--deep);border-top:1px solid rgba(255,255,255,.06);padding:24px;text-align:center;color:var(--muted);font-size:13px}
+footer a{color:var(--muted);text-decoration:none}
+.reveal{opacity:0;transform:translateY(28px);transition:.7s ease}
+.reveal.active{opacity:1;transform:translateY(0)}
+@media(max-width:900px){.hero-inner,.two-col{grid-template-columns:1fr}.cta-inner{grid-template-columns:1fr}}
+@media(max-width:600px){.inv-visual{display:none}}
+</style>
+</head>
+<body>
+<header>
+<nav>
+  <a class="logo-a" href="../index.html">
+    <svg viewBox="0 0 300 300" width="42" height="42"><circle cx="150" cy="150" r="140" fill="#f4b400"/><line x1="40" y1="150" x2="260" y2="150" stroke="white" stroke-width="14" stroke-linecap="round"/><path d="M60 150 C90 60,120 60,150 150 S210 240,240 150" fill="none" stroke="white" stroke-width="14" stroke-linecap="round"/></svg>
+    <span>AuMi</span>
+  </a>
+  <div class="nav-r">
+    <a class="nav-back" href="../index.html#projects"><i class="fas fa-arrow-left"></i> All Projects</a>
+    <a class="nav-cta" href="../index.html#enquiry">Get in Touch</a>
+  </div>
+</nav>
+</header>
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="breadcrumb">
+        <a href="../index.html">AuMi</a>
+        <i class="fas fa-chevron-right" style="font-size:9px"></i>
+        <a href="../index.html#projects">Projects</a>
+        <i class="fas fa-chevron-right" style="font-size:9px"></i>
+        <span class="cur">Industrial Inverter</span>
+      </div>
+      <div class="hero-tag">Project 03 · Power Electronics</div>
+      <h1>Industrial <em>Inverter</em><br>Development</h1>
+      <p class="hero-desc">STM32 ARM Cortex-M based sine-wave inverter platform targeting solar energy and home appliance applications, with a clear technology roadmap toward automotive-grade power conversion.</p>
+      <div class="hero-chips">
+        <span class="chip amber">Active · 2026</span>
+        <span class="chip">STM32 Cortex-M</span>
+        <span class="chip">SPWM / SVPWM</span>
+        <span class="chip">DC-AC Conversion</span>
+        <span class="chip">Solar Ready</span>
+        <span class="chip">EMI/EMC</span>
+      </div>
+      <div class="hero-btns">
+        <a class="btn-p" href="#roadmap"><i class="fas fa-road"></i> Development Roadmap</a>
+        <a class="btn-o" href="../index.html#enquiry"><i class="fas fa-envelope"></i> Request Specs</a>
+      </div>
+    </div>
+    <!-- SVG inverter illustration -->
+    <div class="inv-visual">
+      <div class="inv-svg-wrap">
+        <svg viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+          <defs>
+            <linearGradient id="invGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#1e293b"/>
+              <stop offset="100%" stop-color="#0f172a"/>
+            </linearGradient>
+            <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <!-- Inverter housing -->
+          <rect x="20" y="40" width="320" height="180" rx="12" fill="url(#invGrad)" stroke="rgba(34,197,94,.3)" stroke-width="1.5"/>
+          <!-- Vent slots -->
+          <g opacity=".4">
+            <rect x="30" y="55" width="40" height="4" rx="2" fill="#334155"/>
+            <rect x="30" y="63" width="40" height="4" rx="2" fill="#334155"/>
+            <rect x="30" y="71" width="40" height="4" rx="2" fill="#334155"/>
+            <rect x="30" y="79" width="40" height="4" rx="2" fill="#334155"/>
+            <rect x="290" y="55" width="40" height="4" rx="2" fill="#334155"/>
+            <rect x="290" y="63" width="40" height="4" rx="2" fill="#334155"/>
+            <rect x="290" y="71" width="40" height="4" rx="2" fill="#334155"/>
+            <rect x="290" y="79" width="40" height="4" rx="2" fill="#334155"/>
+          </g>
+
+          <!-- DC Input block -->
+          <rect x="40" y="100" width="80" height="80" rx="8" fill="#0a0f1e" stroke="rgba(245,158,11,.3)" stroke-width="1"/>
+          <text x="80" y="126" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="monospace">DC INPUT</text>
+          <text x="80" y="140" text-anchor="middle" font-size="11" fill="#fbbf24" font-weight="bold" font-family="monospace">48V</text>
+          <text x="80" y="154" text-anchor="middle" font-size="8" fill="#64748b" font-family="monospace">Battery / Solar</text>
+          <!-- + - terminals -->
+          <rect x="58" y="168" width="18" height="8" rx="2" fill="#22c55e" opacity=".7"/>
+          <text x="67" y="175" text-anchor="middle" font-size="8" fill="white" font-family="monospace">+</text>
+          <rect x="88" y="168" width="18" height="8" rx="2" fill="#f87171" opacity=".7"/>
+          <text x="97" y="175" text-anchor="middle" font-size="8" fill="white" font-family="monospace">-</text>
+
+          <!-- H-Bridge block -->
+          <rect x="140" y="90" width="80" height="100" rx="8" fill="#0a0f1e" stroke="rgba(34,197,94,.35)" stroke-width="1"/>
+          <text x="180" y="112" text-anchor="middle" font-size="8" fill="#22c55e" font-family="monospace">H-BRIDGE</text>
+          <!-- IGBT/MOSFET symbols -->
+          <g fill="none" stroke="#22c55e" stroke-width="1" opacity=".7">
+            <rect x="150" y="118" width="14" height="14" rx="2"/><text x="157" y="128" text-anchor="middle" font-size="7" fill="#22c55e" font-family="monospace">Q1</text>
+            <rect x="176" y="118" width="14" height="14" rx="2"/><text x="183" y="128" text-anchor="middle" font-size="7" fill="#22c55e" font-family="monospace">Q2</text>
+            <rect x="150" y="144" width="14" height="14" rx="2"/><text x="157" y="154" text-anchor="middle" font-size="7" fill="#22c55e" font-family="monospace">Q3</text>
+            <rect x="176" y="144" width="14" height="14" rx="2"/><text x="183" y="154" text-anchor="middle" font-size="7" fill="#22c55e" font-family="monospace">Q4</text>
+          </g>
+          <text x="180" y="174" text-anchor="middle" font-size="8" fill="#64748b" font-family="monospace">SPWM</text>
+
+          <!-- MCU block -->
+          <rect x="148" y="50" width="64" height="32" rx="6" fill="#1e293b" stroke="rgba(34,197,94,.4)" stroke-width="1"/>
+          <text x="180" y="63" text-anchor="middle" font-size="8" fill="#22c55e" font-family="monospace">STM32</text>
+          <text x="180" y="74" text-anchor="middle" font-size="7" fill="#94a3b8" font-family="monospace">Cortex-M</text>
+          <!-- MCU to bridge arrow -->
+          <line x1="180" y1="82" x2="180" y2="90" stroke="#22c55e" stroke-width="1" stroke-dasharray="3,2" opacity=".6"/>
+          <polygon points="180,90 177,84 183,84" fill="#22c55e" opacity=".6"/>
+
+          <!-- AC output filter -->
+          <rect x="240" y="100" width="80" height="80" rx="8" fill="#0a0f1e" stroke="rgba(56,189,248,.3)" stroke-width="1"/>
+          <text x="280" y="122" text-anchor="middle" font-size="8" fill="#38bdf8" font-family="monospace">LC FILTER</text>
+          <!-- coil symbol -->
+          <path d="M258 138 Q263 130 268 138 Q273 146 278 138 Q283 130 288 138 Q293 146 298 138 Q303 130 305 138" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity=".7"/>
+          <!-- cap symbol -->
+          <line x1="270" y1="152" x2="290" y2="152" stroke="#38bdf8" stroke-width="1.5" opacity=".7"/>
+          <line x1="270" y1="158" x2="290" y2="158" stroke="#38bdf8" stroke-width="1.5" opacity=".7"/>
+          <text x="280" y="174" text-anchor="middle" font-size="8" fill="#64748b" font-family="monospace">230V AC</text>
+
+          <!-- connection arrows -->
+          <line x1="120" y1="140" x2="140" y2="140" stroke="#f59e0b" stroke-width="1.5" opacity=".7"/>
+          <polygon points="140,140 134,136 134,144" fill="#f59e0b" opacity=".7"/>
+          <line x1="220" y1="140" x2="240" y2="140" stroke="#38bdf8" stroke-width="1.5" opacity=".7"/>
+          <polygon points="240,140 234,136 234,144" fill="#38bdf8" opacity=".7"/>
+
+          <!-- Sine wave output indicator -->
+          <path d="M246 210 Q254 198 262 210 Q270 222 278 210 Q286 198 294 210 Q302 222 310 210" fill="none" stroke="#22c55e" stroke-width="2" filter="url(#glow)"/>
+          <text x="280" y="230" text-anchor="middle" font-size="8" fill="#22c55e" font-family="monospace">PURE SINE OUTPUT</text>
+        </svg>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:13px;font-weight:600;color:white">STM32-based Sine Wave Inverter</div>
+        <div style="font-size:11px;color:var(--sub);margin-top:4px">Solar · Home · Industrial · Automotive-scalable</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section class="section reveal">
+  <div class="two-col">
+    <div>
+      <div class="sec-label">Project Overview</div>
+      <h2 class="sec-title">What we're building</h2>
+      <div class="prose">
+        <p>AuMi's industrial inverter project designs advanced DC-AC power conversion platforms using STM32 ARM Cortex-M microcontrollers. The current development targets solar energy systems and home appliance loads (up to 2 kVA), with the software architecture and hardware design choices deliberately structured to enable a migration path to automotive-grade inverter applications.</p>
+        <p>The power electronics topology is evaluated for optimal switching efficiency using Sinusoidal PWM (SPWM) and Space Vector PWM (SVPWM) techniques. Digital control algorithms running on the STM32 implement voltage regulation, current limiting, load detection and fault management in a single real-time control loop.</p>
+        <p>EMI/EMC compliance is addressed from the design stage through careful PCB layout, common-mode filtering and shielding strategy — a foundation requirement for any future automotive certification pathway.</p>
+      </div>
+    </div>
+    <div>
+      <div class="outcome-list">
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-bolt"></i></div><div><h4>High-Efficiency Platform</h4><p>Optimised topology and gate drive design targets >95% peak conversion efficiency.</p></div></div>
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-shield-alt"></i></div><div><h4>Reliable Under Variable Load</h4><p>Robust control loop maintains regulated output under dynamic load conditions — appliance startup surges, motor loads.</p></div></div>
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-layer-group"></i></div><div><h4>Modular & Scalable Architecture</h4><p>Power stage and control board separation allows power scaling without software redesign.</p></div></div>
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-thermometer-half"></i></div><div><h4>Thermal & Electrical Performance</h4><p>Heatsink design and junction temperature modelling ensures reliable long-duration operation.</p></div></div>
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-car"></i></div><div><h4>Automotive Scalability Foundation</h4><p>Design decisions at every stage evaluate compatibility with automotive standards for future EV inverter development.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEY ACTIVITIES -->
+<section class="section reveal" style="padding-top:0">
+  <div class="sec-label">Engineering Scope</div>
+  <h2 class="sec-title">Key Activities</h2>
+  <div class="act-grid">
+    <div class="act-card"><i class="fas fa-sitemap"></i><h3>Power Electronics Architecture</h3><p>DC-AC topology selection, gate driver design, bus capacitor sizing and PCB power plane layout for the inverter power stage.</p></div>
+    <div class="act-card"><i class="fas fa-wave-square"></i><h3>DC-AC Topology Evaluation</h3><p>Full-bridge and half-bridge topology comparison, SPWM vs SVPWM evaluation, switching frequency optimisation and dead-time management.</p></div>
+    <div class="act-card"><i class="fas fa-fire-alt"></i><h3>Switching & Thermal Management</h3><p>IGBT/MOSFET selection, gate resistance tuning, heatsink design and thermal modelling for continuous and peak load conditions.</p></div>
+    <div class="act-card"><i class="fas fa-code"></i><h3>Digital Control Algorithms</h3><p>STM32-based voltage and current control loops, PI/PR regulators, PWM generation, ADC sampling and real-time fault handling.</p></div>
+    <div class="act-card"><i class="fas fa-exclamation-triangle"></i><h3>Protection & Fault Management</h3><p>Overcurrent, overvoltage, undervoltage, thermal and short-circuit protection with fast hardware trip and software recovery.</p></div>
+    <div class="act-card"><i class="fas fa-broadcast-tower"></i><h3>EMI/EMC Optimisation</h3><p>Common-mode filter design, PCB layout strategy, snubber circuits and conducted/radiated emission management for compliance.</p></div>
+    <div class="act-card"><i class="fas fa-car-battery"></i><h3>Automotive-Grade Scalability</h3><p>Assessment of design choices for compatibility with ISO 26262, AEC-Q qualification and EV inverter power requirements.</p></div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="section reveal" id="roadmap" style="padding-top:0">
+  <div class="sec-label">Development Roadmap</div>
+  <h2 class="sec-title">Project Phases</h2>
+  <p class="sec-sub">From concept design through automotive-scalable production.</p>
+  <div class="roadmap-strip">
+    <div class="roadmap-steps">
+      <div class="rs-step">
+        <div class="rs-date">Q1 2026</div>
+        <div class="rs-dot"></div>
+        <h4>Architecture Design</h4>
+        <p>Topology selection, component sizing, schematic</p>
+      </div>
+      <div class="rs-step">
+        <div class="rs-date">Q2 2026</div>
+        <div class="rs-dot"></div>
+        <h4>PCB & Prototype</h4>
+        <p>PCB layout, first prototype build, bench testing</p>
+      </div>
+      <div class="rs-step">
+        <div class="rs-date">Q3 2026</div>
+        <div class="rs-dot future"></div>
+        <h4>Control Algorithm</h4>
+        <p>STM32 firmware, closed-loop voltage control, protection</p>
+      </div>
+      <div class="rs-step">
+        <div class="rs-date">Q4 2026</div>
+        <div class="rs-dot future"></div>
+        <h4>Validation</h4>
+        <p>Load testing, thermal validation, EMI pre-compliance</p>
+      </div>
+      <div class="rs-step">
+        <div class="rs-date">2027</div>
+        <div class="rs-dot future"></div>
+        <h4>Automotive Scale</h4>
+        <p>EV inverter architecture study, AEC-Q component migration</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band">
+  <div class="cta-inner">
+    <div><h2>Need a custom inverter solution?</h2><p>Solar, UPS, industrial or EV — our engineers can design for your specification.</p></div>
+    <div class="cta-btns">
+      <a class="btn-p" href="../index.html#enquiry"><i class="fas fa-paper-plane"></i> Send Enquiry</a>
+      <a class="btn-o" href="power-transformer.html"><i class="fas fa-bolt"></i> Transformer Project</a>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2025 AuMi Robotics and Mobility Solutions · <a href="../index.html">Home</a> · <a href="../index.html#projects">Projects</a></p></footer>
+<script>function reveal(){document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<window.innerHeight-60)el.classList.add('active')})}window.addEventListener('scroll',reveal);reveal();</script>
+</body>
+</html>

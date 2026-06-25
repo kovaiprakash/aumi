@@ -1,1 +1,268 @@
-transformer project info
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power Transformer Manufacturing | AuMi Projects</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:#020617;color:#e5e7eb;line-height:1.6}
+:root{--green:#22c55e;--green-dim:#16a34a;--amber:#f59e0b;--navy:#0f172a;--deep:#020617;--slate:#1e293b;--muted:#64748b;--sub:#94a3b8;--mono:'Space Mono',monospace}
+header{position:fixed;width:100%;top:0;background:rgba(2,6,23,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(34,197,94,.12);z-index:2000}
+nav{max-width:1280px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:12px 24px}
+.logo-a{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-a span{font-size:20px;font-weight:700;color:white}
+.nav-r{display:flex;align-items:center;gap:10px}
+.nav-back{display:inline-flex;align-items:center;gap:7px;color:var(--sub);font-size:13px;text-decoration:none;padding:8px 14px;border-radius:7px;transition:.2s}
+.nav-back:hover{color:var(--green);background:rgba(34,197,94,.07)}
+.nav-cta{background:var(--green);color:white;padding:9px 20px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;transition:.2s}
+.nav-cta:hover{background:var(--green-dim)}
+
+.hero{padding:130px 24px 80px;background:linear-gradient(160deg,#020617,#071015 50%,#020617);position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(90deg,rgba(245,158,11,.03) 1px,transparent 1px),linear-gradient(rgba(245,158,11,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-inner{max-width:1280px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:2}
+.breadcrumb{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:20px}
+.breadcrumb a{color:var(--muted);text-decoration:none}.breadcrumb a:hover{color:var(--green)}.breadcrumb .cur{color:var(--amber)}
+.hero-tag{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-size:clamp(28px,4vw,50px);font-weight:700;line-height:1.15;margin-bottom:16px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--amber),#fcd34d);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-desc{color:var(--sub);font-size:15px;line-height:1.8;margin-bottom:28px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.chip{font-family:var(--mono);font-size:10px;letter-spacing:.5px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:var(--amber);padding:5px 12px;border-radius:4px}
+.chip.green{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:var(--green)}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-p{background:var(--amber);color:#000;padding:12px 26px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;transition:.25s;display:inline-flex;align-items:center;gap:7px}
+.btn-p:hover{background:var(--amber-dim);transform:translateY(-2px)}
+:root{--amber-dim:#d97706}
+.btn-o{border:1.5px solid rgba(255,255,255,.18);padding:11px 22px;border-radius:8px;color:var(--text);font-size:14px;text-decoration:none;transition:.25s;display:inline-flex;align-items:center;gap:7px}
+.btn-o:hover{border-color:var(--amber);color:var(--amber)}
+
+/* Transformer photo with overlay */
+.hero-visual{border-radius:16px;overflow:hidden;border:1px solid rgba(245,158,11,.2);position:relative;background:var(--slate)}
+.hero-visual img{width:100%;display:block;max-height:340px;object-fit:cover;opacity:.8}
+.hvo{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(2,6,23,.9))}
+.hvo-title{font-size:13px;font-weight:600;color:white}.hvo-sub{font-size:11px;color:var(--sub)}
+
+.section{max-width:1280px;margin:auto;padding:80px 24px}
+.sec-label{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:10px}
+.sec-title{font-size:clamp(22px,3vw,34px);font-weight:700;margin-bottom:12px}
+.sec-sub{color:var(--sub);font-size:15px;max-width:560px;margin-bottom:44px;line-height:1.7}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.prose p{color:var(--sub);font-size:14px;line-height:1.8;margin-bottom:14px}
+
+/* Product table */
+.table-wrap{overflow-x:auto;border-radius:12px;border:1px solid rgba(255,255,255,.07)}
+table{width:100%;border-collapse:collapse;background:var(--navy)}
+th{background:#0a0f1e;color:var(--amber);font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;padding:14px 16px;text-align:left}
+td{padding:13px 16px;font-size:13px;color:var(--sub);border-top:1px solid rgba(255,255,255,.05)}
+tr:hover td{background:rgba(245,158,11,.04);color:#e5e7eb}
+
+.act-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.act-card{background:var(--slate);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:24px;transition:.3s;border-left:3px solid var(--amber)}
+.act-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.act-card i{color:var(--amber);font-size:20px;margin-bottom:12px}
+.act-card h3{font-size:14px;font-weight:600;margin-bottom:7px}
+.act-card p{color:var(--sub);font-size:12px;line-height:1.6}
+
+.strategic-box{background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(34,197,94,.04));border:1px solid rgba(245,158,11,.2);border-radius:14px;padding:32px;margin-top:0}
+.strategic-box h3{font-size:18px;font-weight:700;margin-bottom:12px;color:var(--amber)}
+.strategic-box p{color:var(--sub);font-size:14px;line-height:1.8}
+
+.outcome-list{display:flex;flex-direction:column;gap:12px}
+.outcome-item{display:flex;align-items:flex-start;gap:12px;background:var(--slate);border-radius:10px;padding:18px;border:1px solid rgba(255,255,255,.06)}
+.outcome-icon{width:36px;height:36px;border-radius:8px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;color:var(--amber);flex-shrink:0;font-size:14px}
+.outcome-item h4{font-size:13px;font-weight:600;margin-bottom:3px}
+.outcome-item p{color:var(--sub);font-size:12px;line-height:1.5}
+
+.calc-cta{background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(34,197,94,.04));border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:28px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:0}
+.calc-cta p{color:var(--sub);font-size:14px;margin-top:4px}
+.calc-cta a{background:var(--green);color:white;padding:11px 22px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:7px;transition:.2s}
+.calc-cta a:hover{background:var(--green-dim)}
+
+.cta-band{background:linear-gradient(135deg,rgba(245,158,11,.07),rgba(34,197,94,.04));border-top:1px solid rgba(245,158,11,.12);border-bottom:1px solid rgba(245,158,11,.12);padding:70px 24px}
+.cta-inner{max-width:1280px;margin:auto;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center}
+.cta-inner h2{font-size:clamp(20px,2.5vw,30px);font-weight:700;margin-bottom:8px}
+.cta-inner p{color:var(--sub);font-size:14px}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap;flex-shrink:0}
+footer{background:var(--deep);border-top:1px solid rgba(255,255,255,.06);padding:24px;text-align:center;color:var(--muted);font-size:13px}
+footer a{color:var(--muted);text-decoration:none}
+.reveal{opacity:0;transform:translateY(28px);transition:.7s ease}
+.reveal.active{opacity:1;transform:translateY(0)}
+@media(max-width:900px){.hero-inner,.two-col{grid-template-columns:1fr}.cta-inner{grid-template-columns:1fr}}
+@media(max-width:600px){.hero-visual{display:none}}
+</style>
+</head>
+<body>
+<header>
+<nav>
+  <a class="logo-a" href="../index.html">
+    <svg viewBox="0 0 300 300" width="42" height="42"><circle cx="150" cy="150" r="140" fill="#f4b400"/><line x1="40" y1="150" x2="260" y2="150" stroke="white" stroke-width="14" stroke-linecap="round"/><path d="M60 150 C90 60,120 60,150 150 S210 240,240 150" fill="none" stroke="white" stroke-width="14" stroke-linecap="round"/></svg>
+    <span>AuMi</span>
+  </a>
+  <div class="nav-r">
+    <a class="nav-back" href="../index.html#projects"><i class="fas fa-arrow-left"></i> All Projects</a>
+    <a class="nav-cta" href="../index.html#enquiry">Get a Quote</a>
+  </div>
+</nav>
+</header>
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="breadcrumb">
+        <a href="../index.html">AuMi</a>
+        <i class="fas fa-chevron-right" style="font-size:9px"></i>
+        <a href="../index.html#projects">Projects</a>
+        <i class="fas fa-chevron-right" style="font-size:9px"></i>
+        <span class="cur">Power Transformer Manufacturing</span>
+      </div>
+      <div class="hero-tag">Project 04 · Magnetics Manufacturing</div>
+      <h1>Power <em>Transformer</em><br>Design & Manufacturing</h1>
+      <p class="hero-desc">Custom step-up and step-down control transformers for industrial, power electronics, automation and EV charging applications — 10 W to 2 kW, wound with CNC precision winding technology.</p>
+      <div class="hero-chips">
+        <span class="chip">10W – 2kW</span>
+        <span class="chip">CNC Winding</span>
+        <span class="chip green">Active Production</span>
+        <span class="chip">Isolation / Control</span>
+        <span class="chip">SMPS / Toroidal</span>
+        <span class="chip">EV Charger Ready</span>
+      </div>
+      <div class="hero-btns">
+        <a class="btn-p" href="../tools/transformer-calculator.html"><i class="fas fa-calculator"></i> Transformer Calculator</a>
+        <a class="btn-o" href="../index.html#enquiry"><i class="fas fa-envelope"></i> Request a Quote</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <!-- Using a Pexels/Unsplash industrial transformer image -->
+      <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80" alt="Power Transformer" 
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <!-- fallback SVG illustration -->
+      <div style="display:none;width:100%;height:280px;align-items:center;justify-content:center;background:var(--slate)">
+        <svg viewBox="0 0 300 200" width="280">
+          <!-- EI Core -->
+          <rect x="30" y="20" width="240" height="160" rx="6" fill="#1e293b" stroke="rgba(245,158,11,.3)" stroke-width="1.5"/>
+          <!-- Core limbs -->
+          <rect x="50" y="40" width="30" height="120" rx="4" fill="#334155"/>
+          <rect x="220" y="40" width="30" height="120" rx="4" fill="#334155"/>
+          <rect x="50" y="40" width="200" height="24" rx="4" fill="#334155"/>
+          <rect x="50" y="136" width="200" height="24" rx="4" fill="#334155"/>
+          <!-- Primary winding -->
+          <g fill="none" stroke="#f59e0b" stroke-width="2" opacity=".8">
+            <path d="M100 70 Q110 60 120 70 Q130 80 140 70"/>
+            <path d="M100 82 Q110 72 120 82 Q130 92 140 82"/>
+            <path d="M100 94 Q110 84 120 94 Q130 104 140 94"/>
+            <path d="M100 106 Q110 96 120 106 Q130 116 140 106"/>
+            <path d="M100 118 Q110 108 120 118 Q130 128 140 118"/>
+          </g>
+          <text x="120" y="145" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="monospace">PRIMARY</text>
+          <!-- Secondary winding -->
+          <g fill="none" stroke="#22c55e" stroke-width="2" opacity=".8">
+            <path d="M160 70 Q170 60 180 70 Q190 80 200 70"/>
+            <path d="M160 82 Q170 72 180 82 Q190 92 200 82"/>
+            <path d="M160 94 Q170 84 180 94 Q190 104 200 94"/>
+            <path d="M160 106 Q170 96 180 106 Q190 116 200 106"/>
+          </g>
+          <text x="180" y="145" text-anchor="middle" font-size="9" fill="#22c55e" font-family="monospace">SECONDARY</text>
+          <!-- Labels -->
+          <text x="150" y="185" text-anchor="middle" font-size="10" fill="#64748b" font-family="monospace">EI CORE — STEP-DOWN CONTROL TRANSFORMER</text>
+        </svg>
+      </div>
+      <div class="hvo">
+        <div class="hvo-title">CNC-Wound Control Transformers — 10 W to 2 kW</div>
+        <div class="hvo-sub">Isolation · Control · SMPS · Toroidal · Inverter</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALC CTA BANNER -->
+<section class="section reveal" style="padding-bottom:0">
+  <div class="calc-cta">
+    <div>
+      <strong style="font-size:15px;color:white"><i class="fas fa-calculator" style="color:var(--green);margin-right:8px"></i>Transformer Design Calculator</strong>
+      <p>Compute turns ratio, core area, winding parameters and efficiency for your custom transformer specification.</p>
+    </div>
+    <a href="../tools/transformer-calculator.html"><i class="fas fa-external-link-alt"></i> Open Calculator</a>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section class="section reveal">
+  <div class="two-col">
+    <div>
+      <div class="sec-label">Project Overview</div>
+      <h2 class="sec-title">What we manufacture</h2>
+      <div class="prose">
+        <p>AuMi designs and manufactures a complete range of step-up and step-down control transformers for industrial automation, power electronics, UPS systems, EV charging and specialised electronics applications. Every transformer is engineered to specification using precision CNC winding machines, ensuring consistent electrical performance across all production units.</p>
+        <p>The portfolio spans isolation transformers, control transformers for PLC and relay panels, low-frequency inverter transformers, high-frequency SMPS magnetics and toroidal designs for audio and medical electronics — from 10 W to 2 kW.</p>
+      </div>
+      <div class="strategic-box" style="margin-top:24px">
+        <h3><i class="fas fa-road" style="margin-right:8px"></i>Strategic Importance</h3>
+        <p>The transformer manufacturing programme builds in-house core competencies in magnetic design, winding technologies and insulation systems — directly supporting AuMi's long-term roadmap into <strong>electric motor design and manufacturing</strong>. The expertise, tooling and processes developed here form the foundation for future EV motor production capability.</p>
+      </div>
+    </div>
+    <div>
+      <div class="outcome-list">
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-tools"></i></div><div><h4>Application-Specific Solutions</h4><p>Custom voltage ratios, power ratings and mechanical formats for exact application requirements.</p></div></div>
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-check-double"></i></div><div><h4>High Reliability & Long Life</h4><p>Class H insulation systems, vacuum impregnation and thermal design for 20+ year operational life.</p></div></div>
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-bolt"></i></div><div><h4>Optimised Efficiency</h4><p>Silicon steel and ferrite core selection minimises no-load losses and maximises efficiency at rated load.</p></div></div>
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-industry"></i></div><div><h4>Consistent Manufacturing Quality</h4><p>CNC winding machines ensure layer uniformity and insulation integrity across every production unit.</p></div></div>
+        <div class="outcome-item"><div class="outcome-icon"><i class="fas fa-motor" style="font-family:inherit"></i><i class="fas fa-cog"></i></div><div><h4>Motor Manufacturing Foundation</h4><p>Magnetic design expertise, winding infrastructure and production processes directly transferable to electric motor manufacturing.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT TABLE -->
+<section class="section reveal" style="padding-top:0">
+  <div class="sec-label">Product Portfolio</div>
+  <h2 class="sec-title">Transformer Range</h2>
+  <p class="sec-sub">Standard product lines available for immediate enquiry. All types available in custom specifications.</p>
+  <div class="table-wrap">
+    <table>
+      <tr>
+        <th>Product Type</th><th>Input Voltage</th><th>Output Voltage</th><th>Power Rating</th><th>Key Applications</th>
+      </tr>
+      <tr><td>Isolation Transformer</td><td>230 V AC</td><td>230 V AC</td><td>100 VA – 2 kVA</td><td>Medical equipment, UPS systems, panel isolation</td></tr>
+      <tr><td>Control Transformer</td><td>415 V AC</td><td>230 / 110 / 24 V</td><td>50 VA – 1 kVA</td><td>PLC panels, CNC machines, relay circuits</td></tr>
+      <tr><td>Inverter Transformer</td><td>12 / 24 / 48 V DC</td><td>230 V AC</td><td>500 W – 2 kW</td><td>Home inverters, solar hybrid systems, UPS</td></tr>
+      <tr><td>SMPS Transformer</td><td>Custom</td><td>Custom</td><td>20 W – 2 kW</td><td>EV chargers, SMPS power supplies, telecom</td></tr>
+      <tr><td>Toroidal Transformer</td><td>230 V AC</td><td>12 / 24 / 48 V</td><td>50 VA – 2 kVA</td><td>Audio equipment, medical electronics, precision systems</td></tr>
+      <tr><td>Inductors & Chokes</td><td>—</td><td>—</td><td>Up to 1 kW systems</td><td>Line chokes, DC inductors, EMI filter magnetics</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- KEY ACTIVITIES -->
+<section class="section reveal" style="padding-top:0">
+  <div class="sec-label">Engineering & Manufacturing Scope</div>
+  <h2 class="sec-title">What's Involved</h2>
+  <div class="act-grid">
+    <div class="act-card"><i class="fas fa-file-alt"></i><h3>Specification & Magnetic Design</h3><p>Transformer specification analysis, turns ratio calculation, flux density, core loss estimation and winding arrangement.</p></div>
+    <div class="act-card"><i class="fas fa-atom"></i><h3>Core Material Selection</h3><p>Silicon steel, amorphous, ferrite and toroidal core selection based on frequency, loss and cost requirements.</p></div>
+    <div class="act-card"><i class="fas fa-cog"></i><h3>CNC Precision Winding</h3><p>Layer winding, section winding and interleaved designs using CNC winding machines for consistent, repeatable coil geometry.</p></div>
+    <div class="act-card"><i class="fas fa-thermometer-three-quarters"></i><h3>Thermal & Efficiency Analysis</h3><p>Copper and core loss calculation, temperature rise modelling and insulation class selection for target operating conditions.</p></div>
+    <div class="act-card"><i class="fas fa-flask"></i><h3>Prototype & Testing</h3><p>Prototype build, open/short circuit tests, insulation resistance, dielectric strength and temperature rise validation.</p></div>
+    <div class="act-card"><i class="fas fa-industry"></i><h3>Manufacturing Process & QA</h3><p>Production jig design, winding process control, vacuum impregnation, curing and end-of-line electrical testing.</p></div>
+    <div class="act-card"><i class="fas fa-graduation-cap"></i><h3>Motor Manufacturing Competency</h3><p>Building winding, insulation and magnetic design expertise directly applicable to future EV motor stator manufacturing.</p></div>
+  </div>
+</section>
+
+<div class="cta-band">
+  <div class="cta-inner">
+    <div><h2>Need a custom transformer?</h2><p>Specify your voltage, power rating and application — we'll provide a design and quotation.</p></div>
+    <div class="cta-btns">
+      <a class="btn-p" href="../index.html#enquiry"><i class="fas fa-paper-plane"></i> Send Enquiry</a>
+      <a class="btn-o" href="../products/power-transformers.html"><i class="fas fa-bolt"></i> Product Catalogue</a>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2025 AuMi Robotics and Mobility Solutions · <a href="../index.html">Home</a> · <a href="../index.html#projects">Projects</a></p></footer>
+<script>function reveal(){document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<window.innerHeight-60)el.classList.add('active')})}window.addEventListener('scroll',reveal);reveal();</script>
+</body>
+</html>
