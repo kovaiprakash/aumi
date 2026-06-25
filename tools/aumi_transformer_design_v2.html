@@ -1,1 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transformer Design Tool v2 — AuMi Robotics & Mobility Solutions</title>
+<style>
+:root{
+  --dark:#0a0e1a;--navy:#0d1428;--blue:#1a3a6e;--accent:#2563eb;--bright:#3b82f6;
+  --cyan:#06b6d4;--green:#10b981;--amber:#f59e0b;--red:#ef4444;--purple:#8b5cf6;
+  --white:#f8fafc;--muted:#94a3b8;--border:rgba(255,255,255,0.08);
+  --card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.07);
+  --r:10px;--rl:14px;--font:'Inter','Segoe UI',system-ui,sans-serif;
+  --mono:'JetBrains Mono','Fira Code','Courier New',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--dark);color:var(--white);min-height:100vh;font-size:15px;line-height:1.6}
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,14,26,0.93);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;
+  justify-content:space-between;height:60px}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo{width:34px;height:34px;border-radius:8px;
+  background:linear-gradient(135deg,var(--accent),var(--cyan));
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;color:#fff}
+.nav-name{font-size:15px;font-weight:600;color:var(--white)}
+.nav-name span{color:var(--cyan)}
+.nav-links{display:flex;gap:1.5rem}
+.nav-links a{color:var(--muted);font-size:13px;text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+@media(max-width:640px){.nav-links{display:none}}
+/* HERO */
+.hero{padding:3rem 1.5rem 2rem;text-align:center;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(37,99,235,0.15) 0%,transparent 70%)}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);
+  background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.25);
+  padding:4px 14px;border-radius:20px;margin-bottom:1.1rem}
+.hero h1{font-size:clamp(1.6rem,4vw,2.5rem);font-weight:700;line-height:1.2;
+  letter-spacing:-.03em;margin-bottom:.6rem}
+.hero h1 span{color:var(--bright)}
+.hero p{font-size:14px;color:var(--muted);max-width:560px;margin:0 auto}
+/* CONTAINER */
+.container{max-width:980px;margin:0 auto;padding:0 1.25rem 4rem}
+/* STEP LABEL */
+.step-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:.6rem;margin-top:2rem;display:flex;align-items:center;gap:8px}
+.step-label::after{content:'';flex:1;height:1px;background:var(--border)}
+/* TYPE GRID */
+.type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem}
+.type-btn{border:1px solid var(--border);border-radius:var(--r);background:var(--card);
+  padding:15px 10px 13px;cursor:pointer;text-align:center;transition:all .2s;color:var(--muted);
+  display:flex;flex-direction:column;align-items:center;gap:6px}
+.type-btn:hover{border-color:rgba(59,130,246,.4);background:rgba(59,130,246,.07);color:var(--white)}
+.type-btn.active{border-color:var(--bright);background:rgba(37,99,235,.15);color:var(--white);
+  box-shadow:0 0 0 1px rgba(37,99,235,.3)}
+.type-icon{font-size:22px;line-height:1}
+.type-name{font-size:11.5px;font-weight:500;line-height:1.3}
+.type-note{background:rgba(6,182,212,.07);border:1px solid rgba(6,182,212,.2);
+  border-radius:var(--r);padding:10px 14px;font-size:12.5px;color:var(--muted);margin-bottom:1.5rem;display:none}
+/* FORM */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12.5px;font-weight:500;color:var(--muted)}
+.field input,.field select{background:rgba(255,255,255,.05);border:1px solid var(--border);
+  border-radius:var(--r);color:var(--white);font-family:var(--font);font-size:14px;
+  height:40px;padding:0 12px;transition:border-color .2s;width:100%;-webkit-appearance:none}
+.field select option{background:#1a2535;color:#e2e8f0}
+.field input:focus,.field select:focus{outline:none;border-color:var(--bright);box-shadow:0 0 0 2px rgba(59,130,246,.2)}
+.field .hint{font-size:11px;color:rgba(148,163,184,.6)}
+/* SECONDARY ROWS */
+.sec-row{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;margin-bottom:8px}
+.sec-row .field{margin:0}
+.add-sec-btn,.rem-sec-btn{height:40px;padding:0 14px;border-radius:var(--r);border:1px solid;
+  font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;white-space:nowrap}
+.add-sec-btn{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.3);color:var(--green)}
+.add-sec-btn:hover{background:rgba(16,185,129,.2)}
+.rem-sec-btn{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:var(--red);padding:0 10px}
+.rem-sec-btn:hover{background:rgba(239,68,68,.2)}
+/* WIRE STANDARD TOGGLE */
+.wire-toggle{display:flex;gap:6px;margin-bottom:12px}
+.wire-btn{padding:6px 16px;border-radius:6px;border:1px solid var(--border);
+  background:var(--card);color:var(--muted);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .2s}
+.wire-btn.active{background:rgba(37,99,235,.15);border-color:var(--bright);color:var(--bright)}
+/* BOBBIN GRID */
+.bobbin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px;margin-top:10px}
+.bobbin-opt{border:1px solid var(--border);border-radius:var(--r);background:var(--card);
+  padding:10px 12px;cursor:pointer;transition:all .18s}
+.bobbin-opt:hover{border-color:rgba(59,130,246,.4);background:rgba(59,130,246,.07)}
+.bobbin-opt.selected{border-color:var(--bright);background:rgba(37,99,235,.15);box-shadow:0 0 0 1px rgba(37,99,235,.25)}
+.bobbin-opt.rank1{border-color:var(--green)}
+.bobbin-opt.rank2{border-color:rgba(6,182,212,.6)}
+.bobbin-opt.rank3{border-color:rgba(139,92,246,.5)}
+.bobbin-name{font-size:13px;font-weight:600;color:var(--white)}
+.bobbin-sub{font-size:10.5px;color:rgba(148,163,184,.7);margin-bottom:3px}
+.bobbin-detail{font-size:11px;color:var(--muted)}
+.fitness-bar{height:5px;border-radius:3px;margin-top:6px;background:rgba(255,255,255,.08)}
+.fitness-fill{height:100%;border-radius:3px;transition:width .4s}
+.fitness-label{font-size:10px;margin-top:3px;color:var(--muted)}
+/* BADGE */
+.badge{display:inline-block;font-size:9.5px;font-weight:600;padding:1px 7px;border-radius:20px;margin-left:4px;vertical-align:middle}
+.badge-green{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.badge-blue{background:rgba(59,130,246,.15);color:var(--bright);border:1px solid rgba(59,130,246,.3)}
+.badge-purple{background:rgba(139,92,246,.15);color:#a78bfa;border:1px solid rgba(139,92,246,.3)}
+.badge-amber{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
+/* CTA */
+.calc-btn{width:100%;margin-top:1.25rem;
+  background:linear-gradient(135deg,var(--accent),#1d4ed8);border:none;border-radius:var(--r);
+  color:#fff;font-size:15px;font-weight:600;padding:13px;cursor:pointer;letter-spacing:.01em;
+  transition:opacity .2s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px}
+.calc-btn:hover{opacity:.9}
+.calc-btn:active{transform:scale(.99)}
+/* RESULTS */
+#results{display:none;margin-top:2.5rem}
+/* TABS */
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--border);margin-bottom:1.5rem;padding-bottom:0}
+.tab{padding:9px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;
+  white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.tab:hover{color:var(--white)}
+.tab.active{color:var(--bright);border-bottom-color:var(--bright)}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:1.25rem;margin-bottom:1rem}
+.card-title{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:14px;
+  display:flex;align-items:center;gap:7px;text-transform:uppercase;letter-spacing:.06em}
+.card-title .icon{color:var(--cyan);font-size:14px}
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px}
+.metric{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px}
+.metric-label{font-size:10px;color:rgba(148,163,184,.7);margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em}
+.metric-value{font-size:18px;font-weight:600;color:var(--white);line-height:1.2}
+.metric-unit{font-size:11px;color:var(--muted);margin-left:2px}
+.metric.hi{border-color:rgba(59,130,246,.3);background:rgba(37,99,235,.08)}
+.metric.hi .metric-value{color:var(--bright)}
+.metric.gr{border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.08)}
+.metric.gr .metric-value{color:#34d399}
+.metric.am{border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.08)}
+.metric.am .metric-value{color:var(--amber)}
+/* EFFICIENCY TABLE */
+.eff-table{width:100%;border-collapse:collapse;font-size:13px}
+.eff-table th{font-size:11px;color:var(--muted);padding:7px 10px;border-bottom:1px solid var(--border);text-align:left;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.eff-table td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+.eff-table td:first-child{color:var(--white);font-weight:500}
+.eff-table tr.best td{color:#34d399}
+/* STATUS */
+.status-pass{background:rgba(16,185,129,.12);color:#34d399;border:1px solid rgba(16,185,129,.3);padding:4px 12px;border-radius:6px;font-size:12px;font-weight:600}
+.status-warn{background:rgba(245,158,11,.12);color:#fbbf24;border:1px solid rgba(245,158,11,.3);padding:4px 12px;border-radius:6px;font-size:12px;font-weight:600}
+.status-fail{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.3);padding:4px 12px;border-radius:6px;font-size:12px;font-weight:600}
+/* PROGRESS */
+.progress-wrap{background:rgba(255,255,255,.06);border-radius:4px;height:8px;overflow:hidden;margin:8px 0}
+.progress-bar{height:100%;border-radius:4px;transition:width .6s;background:linear-gradient(90deg,var(--accent),var(--cyan))}
+/* FORMULA GRID */
+.formula-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.formula-item{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px}
+.formula-name{font-size:10.5px;color:var(--muted);margin-bottom:4px}
+.formula-expr{font-size:13px;font-family:var(--mono);color:#a5f3fc;font-weight:500}
+/* CONST TABLE */
+.const-table{width:100%;border-collapse:collapse;font-size:13px}
+.const-table th{font-size:10.5px;color:var(--muted);text-align:left;padding:6px 10px;border-bottom:1px solid var(--border);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.const-table td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+.const-table td:first-child{color:#a5f3fc;font-family:var(--mono);font-weight:500}
+.const-table td:last-child{text-align:right;font-size:11px;color:rgba(148,163,184,.5)}
+/* WIRE TABLE */
+.wire-wrap{overflow-x:auto}
+.wire-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.wire-table th{font-size:11px;color:var(--muted);padding:7px 10px;border-bottom:1px solid var(--border);text-align:left;font-weight:600;white-space:nowrap}
+.wire-table td{padding:6px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted);white-space:nowrap}
+.wire-table tr.hp td{background:rgba(37,99,235,.12);color:var(--white);font-weight:600}
+.wire-table tr.hs td{background:rgba(16,185,129,.1);color:#6ee7b7;font-weight:600}
+/* BOM TABLE */
+.bom-table{width:100%;border-collapse:collapse;font-size:13px}
+.bom-table th{font-size:11px;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.bom-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted)}
+.bom-table td:first-child{color:var(--white);font-weight:500}
+/* NOTES */
+.notes{font-size:13px;color:var(--muted);line-height:1.9}
+.notes li{margin-left:1.2rem;margin-bottom:3px}
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:2rem 0}
+/* SECTION HEADER in results */
+.res-section{font-size:13px;font-weight:600;color:var(--cyan);letter-spacing:.05em;text-transform:uppercase;margin:1.25rem 0 .6rem;display:flex;align-items:center;gap:8px}
+.res-section::after{content:'';flex:1;height:1px;background:var(--border)}
+/* PDF BUTTON */
+.pdf-btn{padding:9px 20px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.35);
+  border-radius:var(--r);color:#a78bfa;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.pdf-btn:hover{background:rgba(139,92,246,.25)}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:1.5rem;text-align:center;font-size:12px;color:rgba(148,163,184,.5)}
+footer a{color:var(--bright);text-decoration:none}
+/* RESPONSIVE */
+@media(max-width:500px){
+  .sec-row{grid-template-columns:1fr 1fr}
+  .rem-sec-btn{grid-column:span 2}
+  .metrics{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
 
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <div class="nav-logo">A</div>
+    <span class="nav-name">AuMi <span>Robotics</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="https://www.aumitechnologies.com" target="_blank">Home</a>
+    <a href="#results">Results</a>
+    <a href="#tab-losses">Losses</a>
+    <a href="#tab-reference">Reference</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">⚡ Professional Power Electronics Design Tool</div>
+  <h1>Transformer <span>Design</span> Calculator</h1>
+  <p>Professional EI &amp; EE core transformer design tool. Supports multi-secondary outputs, copper &amp; core loss, efficiency prediction, temperature rise, BOM generation and PDF export.</p>
+</div>
+
+<div class="container">
+
+<!-- STEP 1 — TYPE -->
+<div class="step-label">Step 1 — Select transformer type</div>
+<div class="type-grid">
+  <div class="type-btn" onclick="selectType('ei','EI Core (Laminated)')" data-t="EI Core (Laminated)"><span class="type-icon">⚙️</span><span class="type-name">EI Core<br>Laminated</span></div>
+  <div class="type-btn" onclick="selectType('ee','EE Core (Ferrite/SMPS)')" data-t="EE Core (Ferrite/SMPS)"><span class="type-icon">🔋</span><span class="type-name">EE Core<br>Ferrite/SMPS</span></div>
+  <div class="type-btn" onclick="selectType('ei','Isolation Transformer')" data-t="Isolation Transformer"><span class="type-icon">🛡️</span><span class="type-name">Isolation<br>Transformer</span></div>
+  <div class="type-btn" onclick="selectType('ei','Auto Transformer')" data-t="Auto Transformer"><span class="type-icon">🔄</span><span class="type-name">Auto<br>Transformer</span></div>
+  <div class="type-btn" onclick="selectType('ei','Inverter Transformer')" data-t="Inverter Transformer"><span class="type-icon">⚡</span><span class="type-name">Inverter<br>Transformer</span></div>
+  <div class="type-btn" onclick="selectType('toroid','Toroidal')" data-t="Toroidal"><span class="type-icon">🍩</span><span class="type-name">Toroidal</span></div>
+</div>
+<div id="typeNote" class="type-note"></div>
+
+<!-- EI PARAMS -->
+<div id="eiParams" style="display:none">
+  <div class="step-label">Step 2 — Electrical parameters</div>
+  <div class="form-grid">
+    <div class="field"><label>Power Rating (VA)</label><input type="number" id="va" placeholder="e.g. 500" min="1" oninput="renderEIGrid()"><span class="hint">Apparent power</span></div>
+    <div class="field"><label>Input Voltage (V)</label><input type="number" id="vin" placeholder="e.g. 230" min="1"></div>
+    <div class="field"><label>Frequency (Hz)</label>
+      <select id="freq"><option value="50" selected>50 Hz — India / EU</option><option value="60">60 Hz — US / Japan</option></select></div>
+    <div class="field"><label>Flux Density Bm (T)</label>
+      <select id="bm"><option value="1.0">1.0 T — Conservative / control</option><option value="1.2">1.2 T — Standard CRNGO</option><option value="1.4" selected>1.4 T — CRGO (recommended)</option><option value="1.6">1.6 T — Premium grain-oriented</option></select></div>
+    <div class="field"><label>Current Density J (A/mm²)</label>
+      <select id="jdens"><option value="2.5">2.5 — Excellent cooling</option><option value="3.0">3.0 — Good cooling</option><option value="3.5" selected>3.5 — Standard control xfmr</option><option value="4.0">4.0 — Compact / intermittent</option><option value="4.5">4.5 — Forced-air cooling</option></select></div>
+    <div class="field"><label>Copper Fill Factor Kw</label>
+      <select id="kw"><option value="0.25">0.25 — Many thin wires</option><option value="0.30" selected>0.30 — Standard</option><option value="0.35">0.35 — Few large wires</option><option value="0.40">0.40 — Foil winding</option></select></div>
+    <div class="field"><label>Core Material</label>
+      <select id="coreMat"><option value="CRGO">CRGO — Cold-rolled grain-oriented</option><option value="CRNGO" selected>CRNGO — Cold-rolled non-oriented</option><option value="Amorphous">Amorphous metal</option></select></div>
+    <div class="field"><label>Cooling Method</label>
+      <select id="cooling"><option value="natural" selected>Natural air cooling (ONAN)</option><option value="forced">Forced-air cooling (ONAF)</option></select></div>
+    <div class="field"><label>Ambient Temperature (°C)</label>
+      <input type="number" id="tamb" placeholder="40" value="40" min="10" max="55"></div>
+    <div class="field"><label>Sec. Voltage Compensation Kc</label>
+      <select id="comp"><option value="1.03">1.03 — Low drop</option><option value="1.05" selected>1.05 — Standard (5%)</option><option value="1.08">1.08 — Long leads</option><option value="1.10">1.10 — High margin</option></select></div>
+  </div>
+
+  <!-- MULTI-SECONDARY -->
+  <div class="step-label" style="margin-top:1.5rem">Secondary outputs</div>
+  <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">Add up to 4 secondary windings (e.g. 24V + 12V + 5V).</p>
+  <div id="secRows"></div>
+  <button class="add-sec-btn" onclick="addSecRow()" style="margin-top:4px;padding:8px 16px;border-radius:var(--r);border:1px solid;font-size:13px;font-weight:500;cursor:pointer;background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.3);color:var(--green)">+ Add secondary output</button>
+
+  <!-- WIRE STANDARD -->
+  <div class="step-label" style="margin-top:1.5rem">Wire gauge standard</div>
+  <div class="wire-toggle">
+    <button class="wire-btn active" onclick="setWireStd('SWG')" id="btn-SWG">SWG (British / Indian)</button>
+    <button class="wire-btn" onclick="setWireStd('AWG')" id="btn-AWG">AWG (American)</button>
+    <button class="wire-btn" onclick="setWireStd('Metric')" id="btn-Metric">Metric (mm²)</button>
+  </div>
+
+  <!-- CORE SELECTION -->
+  <div class="step-label">Step 3 — Core / bobbin selection</div>
+  <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">
+    Fitness score based on VA, window product (Ap = Ac×Aw), copper fill, flux density and thermal margin.
+    <span style="color:var(--green)">Green = best fit</span> · <span style="color:var(--cyan)">Cyan = good</span> · <span style="color:#a78bfa">Purple = acceptable</span>
+  </p>
+  <div class="bobbin-grid" id="eiBobbinGrid"></div>
+</div>
+
+<!-- EE PARAMS -->
+<div id="eeParams" style="display:none">
+  <div class="step-label">Step 2 — SMPS electrical parameters</div>
+  <div class="form-grid">
+    <div class="field"><label>Input Voltage (V DC)</label><input type="number" id="ee_vin" placeholder="e.g. 48" min="1"></div>
+    <div class="field"><label>Output Voltage (V DC)</label><input type="number" id="ee_vout" placeholder="e.g. 12" min="1"></div>
+    <div class="field"><label>Power (W)</label><input type="number" id="ee_power" placeholder="e.g. 150" min="1" oninput="renderEEGrid()"></div>
+    <div class="field"><label>Switching Frequency (kHz)</label>
+      <select id="ee_freq"><option value="20">20 kHz</option><option value="50">50 kHz</option><option value="100" selected>100 kHz</option><option value="200">200 kHz</option><option value="500">500 kHz</option></select></div>
+    <div class="field"><label>Peak Flux Density Bm (T)</label>
+      <select id="ee_bm"><option value="0.15">0.15 T — Low loss</option><option value="0.20">0.20 T — Reduced loss</option><option value="0.25" selected>0.25 T — Standard MnZn</option><option value="0.30">0.30 T — Near saturation</option></select></div>
+    <div class="field"><label>Duty Cycle D</label>
+      <select id="ee_duty"><option value="0.35">0.35 — Forward (light)</option><option value="0.45" selected>0.45 — Forward/flyback</option><option value="0.50">0.50 — Push-pull/bridge</option></select></div>
+    <div class="field"><label>Current Density J (A/mm²)</label>
+      <select id="ee_jdens"><option value="3.0">3.0 — Conservative</option><option value="3.5" selected>3.5 — Standard</option><option value="4.5">4.5 — Compact</option></select></div>
+    <div class="field"><label>Fill Factor Kw</label>
+      <select id="ee_kw"><option value="0.25">0.25 — Multi-layer HV</option><option value="0.30" selected>0.30 — Standard</option><option value="0.40">0.40 — Foil winding</option></select></div>
+    <div class="field"><label>Ferrite Material</label>
+      <select id="ee_mat"><option value="N87">N87 / PC40 (20–100 kHz)</option><option value="N97" selected>N97 / PC44 (50–300 kHz)</option><option value="N49">N49 / PC95 (200 kHz+)</option></select></div>
+  </div>
+  <div class="step-label" style="margin-top:1.5rem">Step 3 — EE ferrite core selection</div>
+  <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px"><span style="color:var(--green)">Green = recommended</span> for your power level. EE5 through EE110.</p>
+  <div class="bobbin-grid" id="eeCoreGrid"></div>
+</div>
+
+<!-- TOROID -->
+<div id="toroidNote" style="display:none;margin-top:1rem">
+  <div class="card"><div class="card-title">Toroidal Design Advisory</div>
+    <ul class="notes">
+      <li>Same EMF formula as EI cores: N = V / (4.44 × f × Bm × Ac)</li>
+      <li>Core area Ac = (OD − ID) / 2 × HT (cm²) | Window = π × (ID/2)²</li>
+      <li>Fill factor Kw typically 0.20–0.25 (manual winding)</li>
+      <li>Common materials: CRGO tape-wound, amorphous, nanocrystalline</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CTA -->
+<div id="calcArea" style="display:none">
+  <button class="calc-btn" onclick="calculate()">🔧 &nbsp;Calculate Design</button>
+</div>
+
+<!-- RESULTS -->
+<div id="results">
+  <div class="divider"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem">
+    <div style="font-size:18px;font-weight:600">Design Results</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span id="resultBadge" class="badge badge-blue" style="font-size:12px;padding:4px 12px"></span>
+      <button class="pdf-btn" onclick="printReport()">📄 Print / Export PDF</button>
+    </div>
+  </div>
+
+  <div class="tabs" id="resultTabs">
+    <div class="tab active" onclick="switchTab('summary')">Summary</div>
+    <div class="tab" onclick="switchTab('windings')">Windings &amp; Wire</div>
+    <div class="tab" onclick="switchTab('losses')" id="tab-losses">Losses &amp; Efficiency</div>
+    <div class="tab" onclick="switchTab('thermal')">Thermal</div>
+    <div class="tab" onclick="switchTab('window')">Window Check</div>
+    <div class="tab" onclick="switchTab('bom')">Winding Sheet &amp; BOM</div>
+    <div class="tab" onclick="switchTab('reference')" id="tab-reference">Formulas</div>
+  </div>
+
+  <div class="tab-pane active" id="tab-summary">
+    <div class="card"><div class="card-title"><span class="icon">🔲</span> Core &amp; turns</div><div class="metrics" id="metricsCore"></div></div>
+    <div class="card"><div class="card-title"><span class="icon">⚡</span> Electrical parameters</div><div class="metrics" id="metricsElec"></div></div>
+    <div class="card"><div class="card-title"><span class="icon">📊</span> Core fitness scores — top recommendations</div><div id="fitnessTable"></div></div>
+  </div>
+
+  <div class="tab-pane" id="tab-windings">
+    <div id="windingCards"></div>
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title"><span class="icon">📋</span> Wire gauge reference — ★P primary &nbsp;|&nbsp; ★S secondary</div>
+      <div class="wire-wrap"><table class="wire-table" id="wireTable"></table></div>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="tab-losses">
+    <div class="card"><div class="card-title"><span class="icon">🌡</span> Copper losses</div><div class="metrics" id="copperLoss"></div></div>
+    <div class="card" style="margin-top:1rem"><div class="card-title"><span class="icon">🧲</span> Core losses</div><div class="metrics" id="coreLoss"></div></div>
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title"><span class="icon">📈</span> Efficiency vs load</div>
+      <table class="eff-table" id="effTable"></table>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="tab-thermal">
+    <div class="card"><div class="card-title"><span class="icon">🌡</span> Temperature rise estimate</div><div id="thermalResult"></div></div>
+  </div>
+
+  <div class="tab-pane" id="tab-window">
+    <div class="card"><div class="card-title"><span class="icon">📐</span> Window area utilisation (Ap product method)</div><div id="windowCheck"></div></div>
+    <div class="card" style="margin-top:1rem"><div class="card-title"><span class="icon">📏</span> Core / bobbin dimensions</div><div id="bobbinDims"></div></div>
+  </div>
+
+  <div class="tab-pane" id="tab-bom">
+    <div class="card"><div class="card-title"><span class="icon">📋</span> Winding sheet</div><div class="wire-wrap"><table class="wire-table" id="windingSheet"></table></div></div>
+    <div class="card" style="margin-top:1rem"><div class="card-title"><span class="icon">🗂</span> Bill of materials (BOM)</div><table class="bom-table" id="bomTable"></table></div>
+  </div>
+
+  <div class="tab-pane" id="tab-reference">
+    <div class="card"><div class="card-title"><span class="icon">📐</span> Design formulas</div><div class="formula-grid" id="formulaGrid"></div></div>
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title"><span class="icon">⚙</span> Constants &amp; assumptions</div>
+      <table class="const-table"><thead><tr><th>Symbol</th><th>Description</th><th>Value</th><th>Source</th></tr></thead><tbody id="constTable"></tbody></table>
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title"><span class="icon">📝</span> Design notes</div>
+      <ul class="notes">
+        <li>Core fitness = weighted score of: VA match (30%), window product Ap (25%), copper fill % (20%), flux density margin (15%), thermal margin (10%).</li>
+        <li>Window product Ap = Ac × Aw. Required Ap = VA / (Kw × J × Bm × 4.44 × f × √2). Industry standard sizing method.</li>
+        <li>Copper loss = Σ(I² × R) per winding. Resistance estimated from wire length (mean turn length × turns) and resistivity of copper (0.0172 Ω·mm²/m at 20°C, corrected to 75°C).</li>
+        <li>Core loss: CRGO ≈ 1.0–1.5 W/kg at 1.4 T / 50 Hz; CRNGO ≈ 2.0–3.0 W/kg. Ferrite N87 ≈ 80 kW/m³ at 0.2 T / 100 kHz (Steinmetz).</li>
+        <li>Temperature rise ΔT ≈ P_total / (k × Surface_area). k = 6 W/(m²·°C) natural, 12 W/(m²·°C) forced air. Surface area estimated from core outline dimensions.</li>
+        <li>Mean turn length (MTL) estimated as 2×(window_width + window_height) + π×core_leg_width per winding build.</li>
+        <li>T-series (Indian) to EI mapping: T-number ≈ EI dimension / 5. Both are displayed in the core selector.</li>
+        <li>SWG (British Standard Wire Gauge) is the standard in India. AWG (American) and metric mm² equivalents shown for reference.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div><!-- /container -->
+
+<footer>
+  <p>© 2025 <a href="https://www.aumitechnologies.com" target="_blank">AuMi Robotics and Mobility Solutions</a> &nbsp;·&nbsp; Coimbatore, Tamil Nadu, India &nbsp;·&nbsp; Transformer Design Tool v2.0</p>
+</footer>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// DATA TABLES
+// ════════════════════════════════════════════════════════════
+
+// Complete EI + T-series database (1 VA → 10 kVA+)
+const EI_BOBBINS = [
+  {ei:"EI24", t:"T-5",   a:24,    b:16,    c:12,   d:8,    e:16,   f:4,    ww:12,  wh:16,  core_cm2:0.96,  win_mm2:120},
+  {ei:"EI28", t:"T-5.5", a:28,    b:18,    c:14,   d:9,    e:18,   f:4.5,  ww:14,  wh:18,  core_cm2:1.26,  win_mm2:160},
+  {ei:"EI30", t:"T-6",   a:30,    b:20,    c:15,   d:10,   e:20,   f:5,    ww:15,  wh:20,  core_cm2:1.50,  win_mm2:200},
+  {ei:"EI32", t:"T-6.5", a:32,    b:21.5,  c:16,   d:10.5, e:21.5, f:5.5,  ww:16,  wh:21,  core_cm2:1.68,  win_mm2:240},
+  {ei:"EI36", t:"T-7",   a:36,    b:24,    c:18,   d:12,   e:24,   f:6,    ww:18,  wh:24,  core_cm2:2.16,  win_mm2:320},
+  {ei:"EI38", t:"T-7.5", a:38,    b:25.5,  c:19,   d:12.5, e:25.5, f:6.5,  ww:19,  wh:25,  core_cm2:2.38,  win_mm2:380},
+  {ei:"EI42", t:"T-8.5", a:42,    b:28,    c:21,   d:14,   e:28,   f:7,    ww:21,  wh:28,  core_cm2:2.94,  win_mm2:450},
+  {ei:"EI45", t:"T-9",   a:45,    b:30,    c:22.5, d:15,   e:30,   f:7.5,  ww:22,  wh:30,  core_cm2:3.38,  win_mm2:520},
+  {ei:"EI48", t:"T-10",  a:48,    b:32,    c:24,   d:16,   e:32,   f:8,    ww:24,  wh:32,  core_cm2:3.84,  win_mm2:580},
+  {ei:"EI54", t:"T-11",  a:54,    b:36,    c:27,   d:18,   e:36,   f:9,    ww:27,  wh:36,  core_cm2:4.86,  win_mm2:750},
+  {ei:"EI57", t:"T-12",  a:57,    b:38,    c:28.5, d:19,   e:38,   f:9.5,  ww:28,  wh:38,  core_cm2:5.42,  win_mm2:860},
+  {ei:"EI60", t:"T-12.5",a:60,    b:40,    c:30,   d:20,   e:40,   f:10,   ww:30,  wh:40,  core_cm2:6.00,  win_mm2:980},
+  {ei:"EI66", t:"T-13.5",a:66,    b:44,    c:33,   d:22,   e:44,   f:11,   ww:33,  wh:44,  core_cm2:7.26,  win_mm2:1200},
+  {ei:"EI72", t:"T-14.5",a:72,    b:48,    c:36,   d:24,   e:48,   f:12,   ww:36,  wh:48,  core_cm2:8.64,  win_mm2:1400},
+  {ei:"EI75", t:"T-15",  a:75,    b:50,    c:37.5, d:25,   e:50,   f:12.5, ww:37,  wh:50,  core_cm2:9.38,  win_mm2:1600},
+  {ei:"EI78", t:"T-16",  a:78,    b:52,    c:39,   d:26,   e:52,   f:13,   ww:39,  wh:52,  core_cm2:10.14, win_mm2:1750},
+  {ei:"EI84", t:"T-17",  a:84,    b:56,    c:42,   d:28,   e:56,   f:14,   ww:42,  wh:56,  core_cm2:11.76, win_mm2:2000},
+  {ei:"EI90", t:"T-18",  a:90,    b:60,    c:45,   d:30,   e:60,   f:15,   ww:45,  wh:60,  core_cm2:13.50, win_mm2:2400},
+  {ei:"EI96", t:"T-19",  a:96,    b:64,    c:48,   d:32,   e:64,   f:16,   ww:48,  wh:64,  core_cm2:15.36, win_mm2:2800},
+  {ei:"EI105",t:"T-21",  a:105,   b:70,    c:52.5, d:35,   e:70,   f:17.5, ww:52,  wh:70,  core_cm2:18.38, win_mm2:3500},
+  {ei:"EI114",t:"T-23",  a:114,   b:76,    c:57,   d:38,   e:76,   f:19,   ww:57,  wh:76,  core_cm2:21.66, win_mm2:4200},
+  {ei:"EI120",t:"T-24",  a:120,   b:80,    c:60,   d:40,   e:80,   f:20,   ww:60,  wh:80,  core_cm2:24.00, win_mm2:4500},
+  {ei:"EI126",t:"T-25",  a:126,   b:84,    c:63,   d:42,   e:84,   f:21,   ww:63,  wh:84,  core_cm2:26.46, win_mm2:5000},
+  {ei:"EI133",t:"T-27",  a:133.2, b:88.8,  c:66.6, d:44.4, e:88.8, f:22.2, ww:66,  wh:88,  core_cm2:29.60, win_mm2:5600},
+  {ei:"EI144",t:"T-29",  a:144,   b:96,    c:72,   d:48,   e:96,   f:24,   ww:72,  wh:96,  core_cm2:34.56, win_mm2:6600},
+  {ei:"EI150",t:"T-30",  a:150,   b:100,   c:75,   d:50,   e:100,  f:25,   ww:75,  wh:100, core_cm2:37.50, win_mm2:7000},
+  {ei:"EI162",t:"T-32",  a:162,   b:108,   c:81,   d:54,   e:108,  f:27,   ww:81,  wh:108, core_cm2:43.70, win_mm2:8500},
+  {ei:"EI168",t:"T-34",  a:168,   b:112,   c:84,   d:56,   e:112,  f:28,   ww:84,  wh:112, core_cm2:47.04, win_mm2:9200},
+  {ei:"EI180",t:"T-36",  a:180,   b:120,   c:90,   d:60,   e:120,  f:30,   ww:90,  wh:120, core_cm2:54.00, win_mm2:10500},
+  {ei:"EI192",t:"T-38",  a:192,   b:128,   c:96,   d:64,   e:128,  f:32,   ww:96,  wh:128, core_cm2:61.44, win_mm2:12000},
+  {ei:"EI210",t:"T-42",  a:210,   b:140,   c:105,  d:70,   e:140,  f:35,   ww:105, wh:140, core_cm2:73.50, win_mm2:14500},
+  {ei:"EI240",t:"T-48",  a:240,   b:160,   c:120,  d:80,   e:160,  f:40,   ww:120, wh:160, core_cm2:96.00, win_mm2:19000},
+  {ei:"EI300",t:"T-60",  a:300,   b:200,   c:150,  d:100,  e:200,  f:50,   ww:150, wh:200, core_cm2:150.0, win_mm2:30000},
+];
+
+const EE_CORES = [
+  {ee:"EE5",   a:5.25,  b:2.65, c:1.95,  d:1.35, Ac:2.63,   Le:8.3,   win_mm2:2.5,   pw:"< 1 W",       fk:"200–2000 kHz"},
+  {ee:"EE8",   a:8.3,   b:4.0,  c:3.6,   d:1.85, Ac:6.83,   Le:13.0,  win_mm2:5.4,   pw:"1–3 W",       fk:"200–1000 kHz"},
+  {ee:"EE10",  a:10.2,  b:5.5,  c:5.0,   d:2.5,  Ac:12.5,   Le:19.0,  win_mm2:11.8,  pw:"2–5 W",       fk:"100–500 kHz"},
+  {ee:"EE11",  a:11.0,  b:5.5,  c:5.0,   d:2.4,  Ac:12.0,   Le:20.3,  win_mm2:11.6,  pw:"2–5 W",       fk:"100–500 kHz"},
+  {ee:"EE13",  a:13.0,  b:6.0,  c:5.9,   d:2.8,  Ac:16.52,  Le:23.6,  win_mm2:16.5,  pw:"3–8 W",       fk:"100–500 kHz"},
+  {ee:"EE16",  a:16.0,  b:7.3,  c:5.1,   d:4.0,  Ac:20.4,   Le:30.0,  win_mm2:23.0,  pw:"5–15 W",      fk:"50–300 kHz"},
+  {ee:"EE19",  a:19.0,  b:8.1,  c:7.2,   d:3.9,  Ac:28.1,   Le:36.0,  win_mm2:37.5,  pw:"8–20 W",      fk:"50–300 kHz"},
+  {ee:"EE20",  a:20.0,  b:10.0, c:8.0,   d:5.0,  Ac:40.0,   Le:38.0,  win_mm2:55.0,  pw:"10–25 W",     fk:"50–200 kHz"},
+  {ee:"EE22",  a:22.0,  b:9.5,  c:9.0,   d:4.0,  Ac:36.0,   Le:39.5,  win_mm2:42.0,  pw:"10–25 W",     fk:"50–200 kHz"},
+  {ee:"EE25",  a:25.0,  b:9.6,  c:9.8,   d:6.0,  Ac:58.8,   Le:46.0,  win_mm2:70.0,  pw:"15–35 W",     fk:"50–200 kHz"},
+  {ee:"EE28",  a:28.0,  b:14.0, c:11.0,  d:7.0,  Ac:77.0,   Le:54.0,  win_mm2:97.0,  pw:"20–50 W",     fk:"50–150 kHz"},
+  {ee:"EE30",  a:30.0,  b:14.2, c:11.0,  d:7.2,  Ac:79.2,   Le:55.0,  win_mm2:100,   pw:"25–60 W",     fk:"50–150 kHz"},
+  {ee:"EE33",  a:33.0,  b:15.5, c:13.0,  d:7.5,  Ac:97.5,   Le:62.0,  win_mm2:125,   pw:"30–80 W",     fk:"25–150 kHz"},
+  {ee:"EE35",  a:35.0,  b:16.2, c:13.5,  d:8.0,  Ac:108.0,  Le:66.0,  win_mm2:143,   pw:"40–100 W",    fk:"25–100 kHz"},
+  {ee:"EE40",  a:40.0,  b:20.0, c:16.0,  d:9.0,  Ac:144.0,  Le:76.0,  win_mm2:200,   pw:"60–150 W",    fk:"25–100 kHz"},
+  {ee:"EE42",  a:42.0,  b:21.0, c:15.0,  d:12.5, Ac:187.5,  Le:79.0,  win_mm2:250,   pw:"80–200 W",    fk:"20–100 kHz"},
+  {ee:"EE46",  a:46.0,  b:23.0, c:18.0,  d:10.0, Ac:180.0,  Le:83.0,  win_mm2:280,   pw:"80–200 W",    fk:"20–100 kHz"},
+  {ee:"EE50",  a:50.0,  b:25.0, c:22.0,  d:10.0, Ac:220.0,  Le:92.0,  win_mm2:330,   pw:"100–250 W",   fk:"20–80 kHz"},
+  {ee:"EE55",  a:55.0,  b:27.0, c:21.0,  d:14.0, Ac:294.0,  Le:102.0, win_mm2:420,   pw:"150–350 W",   fk:"20–80 kHz"},
+  {ee:"EE60",  a:60.0,  b:30.0, c:25.0,  d:12.0, Ac:300.0,  Le:112.0, win_mm2:480,   pw:"200–400 W",   fk:"20–60 kHz"},
+  {ee:"EE65",  a:65.0,  b:32.5, c:27.0,  d:14.0, Ac:378.0,  Le:119.0, win_mm2:560,   pw:"250–500 W",   fk:"20–60 kHz"},
+  {ee:"EE70",  a:70.0,  b:35.0, c:30.0,  d:14.5, Ac:435.0,  Le:129.0, win_mm2:660,   pw:"300–600 W",   fk:"20–50 kHz"},
+  {ee:"EE80",  a:80.0,  b:38.0, c:33.0,  d:17.0, Ac:561.0,  Le:150.0, win_mm2:890,   pw:"400–800 W",   fk:"20–50 kHz"},
+  {ee:"EE85",  a:85.0,  b:42.0, c:36.0,  d:17.0, Ac:612.0,  Le:157.0, win_mm2:1000,  pw:"500–1000 W",  fk:"20–50 kHz"},
+  {ee:"EE110", a:110.0, b:55.0, c:46.0,  d:23.0, Ac:1058.0, Le:210.0, win_mm2:1800,  pw:"800–2000 W",  fk:"10–30 kHz"},
+];
+
+// SWG / AWG / Metric wire table
+const WIRE_TABLE = [
+  {swg:30,awg:29,dia:0.315,area:0.0779}, {swg:29,awg:28,dia:0.345,area:0.0935},
+  {swg:28,awg:27,dia:0.376,area:0.111},  {swg:27,awg:26,dia:0.417,area:0.136},
+  {swg:26,awg:25,dia:0.457,area:0.164},  {swg:25,awg:24,dia:0.508,area:0.203},
+  {swg:24,awg:23,dia:0.559,area:0.246},  {swg:23,awg:22,dia:0.610,area:0.292},
+  {swg:22,awg:21,dia:0.711,area:0.397},  {swg:21,awg:20,dia:0.813,area:0.519},
+  {swg:20,awg:19,dia:0.914,area:0.657},  {swg:19,awg:18,dia:1.016,area:0.811},
+  {swg:18,awg:17,dia:1.219,area:1.167},  {swg:17,awg:16,dia:1.422,area:1.589},
+  {swg:16,awg:15,dia:1.626,area:2.076},  {swg:15,awg:14,dia:1.829,area:2.627},
+  {swg:14,awg:13,dia:2.032,area:3.243},  {swg:13,awg:12,dia:2.337,area:4.289},
+  {swg:12,awg:11,dia:2.642,area:5.482},  {swg:11,awg:10,dia:2.946,area:6.818},
+  {swg:10,awg:9, dia:3.251,area:8.302},
+];
+
+// Core loss data: W/kg at 50 Hz for EI, kW/m³ for ferrite
+const CORE_LOSS = {
+  CRGO:0.9, CRNGO:2.2, Amorphous:0.3,
+  N87:80, N97:60, N49:50 // kW/m³ at 0.2T/100kHz baseline (Steinmetz scaled)
+};
+// Core weight estimate: ≈ 7.65 g/cm³ for silicon steel, 5 g/cm³ ferrite
+const CORE_DENSITY = {CRGO:7.65,CRNGO:7.65,Amorphous:7.2,N87:4.8,N97:4.8,N49:4.8};
+
+// Copper resistivity at 75°C: 0.0217 Ω·mm²/m
+const RHO_CU_75 = 0.0217;
+
+// ════════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════════
+let coreFamily='', selectedType='', selEI=null, selEE=null, wireStd='SWG';
+let secRows=[{v:0,va:0}];
+
+// ════════════════════════════════════════════════════════════
+// SECONDARY ROW MANAGEMENT
+// ════════════════════════════════════════════════════════════
+function initSecRows(){secRows=[{v:'',va:''}];renderSecRows();}
+
+function addSecRow(){
+  if(secRows.length>=4){alert('Maximum 4 secondary outputs supported.');return;}
+  secRows.push({v:'',va:''});renderSecRows();
+}
+
+function removeSecRow(i){
+  if(secRows.length<=1){alert('At least one secondary output required.');return;}
+  secRows.splice(i,1);renderSecRows();
+}
+
+function renderSecRows(){
+  const c=document.getElementById('secRows');
+  c.innerHTML=secRows.map((r,i)=>`
+    <div class="sec-row" id="sr${i}">
+      <div class="field"><label>Secondary ${i+1} Voltage (V)</label>
+        <input type="number" id="sv${i}" value="${r.v}" placeholder="e.g. 24" min="1" onchange="secRows[${i}].v=this.value"></div>
+      <div class="field"><label>Secondary ${i+1} VA (or leave 0 for auto)</label>
+        <input type="number" id="sva${i}" value="${r.va}" placeholder="auto" min="0" onchange="secRows[${i}].va=this.value"></div>
+      <button class="rem-sec-btn" onclick="removeSecRow(${i})">✕</button>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════════════════════════
+// WIRE STANDARD
+// ════════════════════════════════════════════════════════════
+function setWireStd(s){
+  wireStd=s;
+  document.querySelectorAll('.wire-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('btn-'+s).classList.add('active');
+}
+
+function wireLabel(w){
+  if(wireStd==='AWG') return 'AWG '+w.awg;
+  if(wireStd==='Metric') return w.area.toFixed(3)+' mm²';
+  return 'SWG '+w.swg;
+}
+
+// ════════════════════════════════════════════════════════════
+// HELPER FUNCTIONS
+// ════════════════════════════════════════════════════════════
+function selectWire(reqArea){
+  for(const w of WIRE_TABLE){if(w.area>=reqArea)return{wire:w,parallel:1};}
+  const lg=WIRE_TABLE[WIRE_TABLE.length-1];
+  return{wire:lg,parallel:Math.ceil(reqArea/lg.area)};
+}
+
+function windBuild(N,dia,ww){
+  const od=dia+0.10;
+  const tpl=Math.max(1,Math.floor(ww/od));
+  const layers=Math.ceil(N/tpl);
+  return{tpl,layers,build:+(layers*od).toFixed(2)};
+}
+
+function metric(label,val,unit='',cls=''){
+  return`<div class="metric ${cls}"><div class="metric-label">${label}</div>
+    <div class="metric-value">${val}<span class="metric-unit">${unit}</span></div></div>`;
+}
+
+function switchTab(t){
+  const ids=['summary','windings','losses','thermal','window','bom','reference'];
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',ids[i]===t));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+}
+
+// ════════════════════════════════════════════════════════════
+// FITNESS SCORING — professional Ap-based method
+// ════════════════════════════════════════════════════════════
+function scoreBobbin(b, totalVA, freq, bm, J, kw, secDesigns, cooling){
+  const Ac_cm2 = b.core_cm2;
+  const Ac_m2 = Ac_cm2*1e-4;
+  const Aw = b.win_mm2; // mm²
+  const Ap_avail = Ac_cm2 * Aw; // cm² × mm² — proportional
+
+  // Required Ap from industry formula (simplified)
+  const Ap_req = totalVA / (kw * J * bm * 4.44 * freq) * 1e4;
+
+  // Copper fill check
+  const tpv = 1.0/(4.44*freq*bm*Ac_m2);
+  const vin = parseFloat(document.getElementById('vin').value)||230;
+  const np = Math.ceil(vin*tpv);
+  let copperArea = np * (vin > 0 ? totalVA/vin/J : 0);
+  for(const s of secDesigns) copperArea += s.ns * s.as;
+  const fillPct = (copperArea / kw) / Aw * 100;
+
+  // Flux density margin (% headroom to saturation ~1.7 T for CRGO)
+  const bmMargin = (1.7-bm)/1.7*100;
+
+  // Score components (0–100 each)
+  const apRatio = Ap_avail/Ap_req;
+  const apScore = apRatio<0.7?0:apRatio<1.0?apRatio*70:apRatio>1.5?Math.max(0,100-(apRatio-1.5)*40):100;
+  const fillScore = fillPct>100?0:fillPct>90?20:fillPct>80?60:fillPct>60?100:80;
+  const bmScore = bmMargin>30?100:bmMargin>15?80:bmMargin>5?60:40;
+
+  // Weighted total
+  const total = apScore*0.45 + fillScore*0.40 + bmScore*0.15;
+  return {score:Math.round(Math.min(100,Math.max(0,total))), fillPct:fillPct.toFixed(1), apRatio:apRatio.toFixed(2)};
+}
+
+// ════════════════════════════════════════════════════════════
+// TYPE SELECTION
+// ════════════════════════════════════════════════════════════
+const TYPE_NOTES={
+  'EI Core (Laminated)':'Laminated CRGO/CRNGO silicon steel EI core. Standard for 50/60 Hz mains-frequency control transformers from 1 VA to 10 kVA+.',
+  'EE Core (Ferrite/SMPS)':'MnZn ferrite EE core for switch-mode power supplies at 20 kHz–2 MHz. Volt-second balance method used.',
+  'Isolation Transformer':'Galvanic isolation between primary and secondary. Same EI core construction with reinforced insulation.',
+  'Auto Transformer':'Single winding with tap. Not isolated. Lighter for ratios near 1:1.',
+  'Inverter Transformer':'Steps up battery voltage at 50 Hz. Centre-tapped primary common. Higher primary current density.',
+  'Toroidal':'Toroidal core — lower leakage, lower hum, higher efficiency. Different winding method.'
+};
+
+function selectType(family,name){
+  coreFamily=family; selectedType=name;
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.toggle('active',b.dataset.t===name));
+  const n=document.getElementById('typeNote');
+  n.textContent=TYPE_NOTES[name]||''; n.style.display='block';
+  document.getElementById('eiParams').style.display=(family==='ei')?'':'none';
+  document.getElementById('eeParams').style.display=(family==='ee')?'':'none';
+  document.getElementById('toroidNote').style.display=(family==='toroid')?'':'none';
+  document.getElementById('calcArea').style.display=(family!=='toroid')?'':'none';
+  document.getElementById('results').style.display='none';
+  selEI=null; selEE=null;
+  if(family==='ei'){initSecRows();renderEIGrid();}
+  if(family==='ee') renderEEGrid();
+}
+
+// ════════════════════════════════════════════════════════════
+// EI BOBBIN GRID — professional fitness scoring
+// ════════════════════════════════════════════════════════════
+function renderEIGrid(){
+  const va=parseFloat(document.getElementById('va').value)||0;
+  const freq=parseFloat(document.getElementById('freq').value)||50;
+  const bm=parseFloat(document.getElementById('bm').value)||1.4;
+  const J=parseFloat(document.getElementById('jdens').value)||3.5;
+  const kw=parseFloat(document.getElementById('kw').value)||0.30;
+  const cooling=document.getElementById('cooling')?document.getElementById('cooling').value:'natural';
+
+  // Score all bobbins
+  const scored = EI_BOBBINS.map(b=>{
+    if(va===0) return{b,score:0,fillPct:'-',apRatio:'-'};
+    const s=scoreBobbin(b,va,freq,bm,J,kw,[],cooling);
+    return{b,...s};
+  });
+  // Sort by score descending
+  const ranked=[...scored].sort((a,z)=>z.score-a.score);
+
+  const grid=document.getElementById('eiBobbinGrid');
+  grid.innerHTML='';
+  scored.forEach(({b,score,fillPct,apRatio})=>{
+    const rank=ranked.findIndex(r=>r.b===b);
+    const cls=rank===0?'rank1':rank===1?'rank2':rank===2?'rank3':'';
+    const badge=rank===0?'<span class="badge badge-green">Best fit</span>':rank===1?'<span class="badge badge-blue">2nd</span>':rank===2?'<span class="badge badge-purple">3rd</span>':'';
+    const barColor=score>=85?'var(--green)':score>=65?'var(--cyan)':score>=45?'var(--amber)':'var(--red)';
+    const div=document.createElement('div');
+    div.className='bobbin-opt'+((selEI===b)?' selected':'')+' '+cls;
+    div.onclick=()=>{selEI=b;renderEIGrid();};
+    div.innerHTML=`<div style="display:flex;align-items:center;gap:3px;margin-bottom:2px">
+      <span class="bobbin-name">${b.ei}</span>${badge}</div>
+      <div class="bobbin-sub">${b.t} (India)</div>
+      <div class="bobbin-detail">Core: ${b.core_cm2} cm²</div>
+      <div class="bobbin-detail">Win: ${b.win_mm2} mm²</div>
+      ${va>0?`<div class="fitness-bar"><div class="fitness-fill" style="width:${score}%;background:${barColor}"></div></div>
+      <div class="fitness-label">Fitness: ${score}%</div>`:'<div class="bobbin-detail">A×B: '+b.a+'×'+b.b+' mm</div>'}`;
+    grid.appendChild(div);
+  });
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  ['va','freq','bm','jdens','kw','cooling'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.addEventListener('change',()=>{if(coreFamily==='ei')renderEIGrid();});
+  });
+});
+
+// ════════════════════════════════════════════════════════════
+// EE CORE GRID
+// ════════════════════════════════════════════════════════════
+function recEE(pw){
+  for(let i=0;i<EE_CORES.length;i++){
+    const hi=parseInt(EE_CORES[i].pw.replace(/[^0-9–]/g,'').split('–').pop())||0;
+    if(hi>=pw) return i;
+  }
+  return EE_CORES.length-1;
+}
+
+function renderEEGrid(){
+  const pw=parseFloat(document.getElementById('ee_power').value)||0;
+  const recIdx=pw>0?recEE(pw):-1;
+  const grid=document.getElementById('eeCoreGrid');
+  grid.innerHTML='';
+  EE_CORES.forEach((c,i)=>{
+    const isRec=i===recIdx,isAlt=Math.abs(i-recIdx)===1;
+    const div=document.createElement('div');
+    div.className='bobbin-opt'+(selEE===c?' selected':'')+(isRec?' rank1':'');
+    div.onclick=()=>{selEE=c;renderEEGrid();};
+    div.innerHTML=`<div style="display:flex;align-items:center;gap:3px;margin-bottom:2px">
+      <span class="bobbin-name">${c.ee}</span>
+      ${isRec?'<span class="badge badge-green">Rec.</span>':''}
+      ${isAlt&&!isRec?'<span class="badge badge-blue">OK</span>':''}</div>
+      <div class="bobbin-sub">${c.pw}</div>
+      <div class="bobbin-detail">${c.fk}</div>
+      <div class="bobbin-detail">Ac: ${c.Ac} mm²</div>
+      <div class="bobbin-detail">Win: ${c.win_mm2} mm²</div>`;
+    grid.appendChild(div);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// MAIN CALCULATE
+// ════════════════════════════════════════════════════════════
+function calculate(){
+  if(coreFamily==='ei') calcEI();
+  else if(coreFamily==='ee') calcEE();
+}
+
+// ────────────────────────────────────────────────────────────
+// EI CALCULATION — multi-secondary, losses, efficiency, thermal
+// ────────────────────────────────────────────────────────────
+function calcEI(){
+  const vin=parseFloat(document.getElementById('vin').value);
+  const va=parseFloat(document.getElementById('va').value);
+  const freq=parseFloat(document.getElementById('freq').value);
+  const bm=parseFloat(document.getElementById('bm').value);
+  const J=parseFloat(document.getElementById('jdens').value);
+  const kw=parseFloat(document.getElementById('kw').value);
+  const comp=parseFloat(document.getElementById('comp').value);
+  const coreMat=document.getElementById('coreMat').value;
+  const cooling=document.getElementById('cooling').value;
+  const tamb=parseFloat(document.getElementById('tamb').value)||40;
+
+  // Collect secondaries
+  const secs=[];
+  for(let i=0;i<secRows.length;i++){
+    const v=parseFloat(document.getElementById('sv'+i).value);
+    const sva=parseFloat(document.getElementById('sva'+i).value)||0;
+    if(!v||v<=0){alert(`Enter a valid voltage for Secondary ${i+1}.`);return;}
+    secs.push({v, va: sva>0?sva:va}); // distribute total VA if not specified
+  }
+
+  if(!va||!vin){alert('Enter VA and Input Voltage.');return;}
+  if(!selEI){alert('Select a core/bobbin.');return;}
+  if(!selectedType){alert('Select a transformer type.');return;}
+
+  const b=selEI;
+  const Ac_m2=b.core_cm2*1e-4;
+  const tpv=1.0/(4.44*freq*bm*Ac_m2);
+  const np=Math.ceil(vin*tpv);
+  const ip=va/vin;
+  const ap=ip/J;
+  const {wire:pw,parallel:pp}=selectWire(ap);
+  const {tpl:ptpl,layers:plyr,build:pbld}=windBuild(np,pw.dia,b.ww);
+
+  // Mean turn length primary (mm) — 2×(ww+wh) + π×d_leg
+  const mtlP_mm = 2*(b.ww+b.wh)+Math.PI*b.d;
+  // Wire resistance primary at 75°C (Ω)
+  const Rp = RHO_CU_75*(mtlP_mm/1000*np)/(pw.area*pp);
+
+  // Secondary windings
+  const secDesigns=secs.map(s=>{
+    const ns_raw=tpv*s.v*comp;
+    const ns=Math.ceil(ns_raw);
+    const is_=s.va/s.v;
+    const as_=is_/J;
+    const {wire:sw,parallel:sp}=selectWire(as_);
+    const {tpl:stpl,layers:slyr,build:sbld}=windBuild(ns,sw.dia,b.ww);
+    const mtlS_mm=2*(b.ww+b.wh)+Math.PI*b.d+pbld*2; // secondary outside primary
+    const Rs=RHO_CU_75*(mtlS_mm/1000*ns)/(sw.area*sp);
+    return{v:s.v,va:s.va,ns,is_,as_,wire:sw,parallel:sp,tpl:stpl,layers:slyr,build:sbld,Rs};
+  });
+
+  // Copper loss
+  const P_cu_p=ip*ip*Rp;
+  const P_cu_s=secDesigns.reduce((acc,s)=>acc+s.is_*s.is_*s.Rs,0);
+  const P_cu=P_cu_p+P_cu_s;
+
+  // Core weight estimate (kg): volume ≈ (A×B - window)*stack_depth in cm³, density 7.65 g/cm³
+  const stackDepth_cm=b.d/10;
+  const coreSteelVol_cm3=(b.a/10*b.b/10 - b.ww/10*b.wh/10)*stackDepth_cm*2; // ×2 for both E+I
+  const coreWeight_kg=coreSteelVol_cm3*CORE_DENSITY[coreMat]/1000;
+  const specificLoss=CORE_LOSS[coreMat]||1.5; // W/kg
+  const P_fe=specificLoss*coreWeight_kg;
+
+  const P_total=P_cu+P_fe;
+
+  // Efficiency at various loads
+  const loads=[0.25,0.50,0.75,1.00];
+  const effData=loads.map(load=>{
+    const pOut=va*load;
+    const pCuL=P_cu*load*load;
+    const eff=(pOut/(pOut+pCuL+P_fe)*100).toFixed(1);
+    return{load:(load*100)+'%',pOut:pOut.toFixed(0),eff};
+  });
+  const bestEff=effData.reduce((a,b)=>parseFloat(b.eff)>parseFloat(a.eff)?b:a);
+
+  // Temperature rise
+  // Surface area estimate (top+bottom+front+back+sides of core block)
+  const La=b.a/1000, Lb=b.b/1000; // in metres
+  const surfArea_m2=2*(La*Lb)+4*(La*0.04); // rough
+  const k_conv=cooling==='forced'?12:6; // W/(m²·°C)
+  const deltaT=(P_total/(k_conv*surfArea_m2)).toFixed(1);
+  const T_hotspot=(tamb+parseFloat(deltaT)+10).toFixed(1); // +10 hotspot
+  const tStatus=parseFloat(deltaT)<=30?'pass':parseFloat(deltaT)<=50?'warn':'fail';
+
+  // Window check (Ap method)
+  let totalCopper=np*ap;
+  secDesigns.forEach(s=>totalCopper+=s.ns*s.as_);
+  const reqWin=(totalCopper/kw).toFixed(1);
+  const fillPct=+(parseFloat(reqWin)/b.win_mm2*100).toFixed(1);
+  const Ap_avail=(b.core_cm2*b.win_mm2).toFixed(0);
+  const Ap_req=(va/(kw*J*bm*4.44*freq)*1e4).toFixed(0);
+
+  // Turns ratio (primary:first secondary)
+  const ratio=(np/secDesigns[0].ns).toFixed(3);
+
+  // ── RENDER ──
+  document.getElementById('resultBadge').textContent=selectedType+' · '+b.ei+' / '+b.t;
+
+  document.getElementById('metricsCore').innerHTML=
+    metric('Core (EI)',b.ei,'','hi')+metric('Indian type',b.t)+
+    metric('Core area',b.core_cm2,' cm²')+metric('Turns/volt',tpv.toFixed(3),' T/V')+
+    metric('Primary turns',np,' T')+metric('Primary : Sec 1',ratio+':1')+
+    metric('Frequency',freq,' Hz')+metric('Flux density',bm,' T');
+
+  document.getElementById('metricsElec').innerHTML=
+    metric('Input voltage',vin,' V')+metric('Power',va,' VA')+
+    metric('Primary current',ip.toFixed(3),' A')+
+    metric('Core material',coreMat)+
+    secDesigns.map((s,i)=>metric(`Sec ${i+1} voltage`,s.v,' V')+metric(`Sec ${i+1} current`,s.is_.toFixed(3),' A')).join('');
+
+  // Fitness table — top 5
+  const allScored=EI_BOBBINS.map(bx=>{const sc=scoreBobbin(bx,va,freq,bm,J,kw,secDesigns,cooling);return{bx,...sc};}).sort((a,z)=>z.score-a.score);
+  let ftHTML=`<table class="eff-table"><thead><tr><th>Rank</th><th>Core</th><th>Indian</th><th>Fitness</th><th>Fill %</th><th>Ap Ratio</th><th>Status</th></tr></thead><tbody>`;
+  allScored.slice(0,6).forEach(({bx,score,fillPct:fp,apRatio},i)=>{
+    const st=score>=85?'<span class="status-pass">Recommended</span>':score>=65?'<span class="status-pass" style="background:rgba(6,182,212,.12);color:#22d3ee;border-color:rgba(6,182,212,.3)">Good</span>':score>=45?'<span class="status-warn">Acceptable</span>':'<span class="status-fail">Oversized</span>';
+    ftHTML+=`<tr class="${bx===selEI?'best':''}"><td>#${i+1}</td><td>${bx.ei}</td><td>${bx.t}</td><td>${score}%</td><td>${fp}%</td><td>${apRatio}×</td><td>${st}</td></tr>`;
+  });
+  ftHTML+='</tbody></table>';
+  document.getElementById('fitnessTable').innerHTML=ftHTML;
+
+  // Winding cards
+  let wCards=`<div class="card"><div class="card-title">🔵 Primary winding</div><div class="metrics">
+    ${metric('Turns',np,' T')}${metric('Current',ip.toFixed(3),' A')}
+    ${metric('Req. area',ap.toFixed(3),' mm²')}${metric(wireStd,wireLabel(pw))}
+    ${metric('Wire dia',pw.dia,' mm')}${metric('Wire area',pw.area,' mm²')}
+    ${metric('Parallel',pp)}${metric('Turns/layer',ptpl)}
+    ${metric('Layers',plyr)}${metric('Build',pbld,' mm')}
+    ${metric('Resistance',Rp.toFixed(3),' Ω')}${metric('I²R loss',P_cu_p.toFixed(2),' W','am')}
+  </div></div>`;
+  secDesigns.forEach((s,i)=>{
+    wCards+=`<div class="card" style="margin-top:1rem"><div class="card-title">🟢 Secondary ${i+1} — ${s.v} V @ ${s.va} VA</div><div class="metrics">
+      ${metric('Turns',s.ns,' T')}${metric('Current',s.is_.toFixed(3),' A')}
+      ${metric('Req. area',s.as_.toFixed(3),' mm²')}${metric(wireStd,wireLabel(s.wire))}
+      ${metric('Wire dia',s.wire.dia,' mm')}${metric('Wire area',s.wire.area,' mm²')}
+      ${metric('Parallel',s.parallel)}${metric('Turns/layer',s.tpl)}
+      ${metric('Layers',s.layers)}${metric('Build',s.build,' mm')}
+      ${metric('Resistance',s.Rs.toFixed(3),' Ω')}${metric('I²R loss',(s.is_*s.is_*s.Rs).toFixed(2),' W','am')}
+    </div></div>`;
+  });
+  document.getElementById('windingCards').innerHTML=wCards;
+
+  // Wire table
+  buildWireTable(pw.swg,secDesigns[0].wire.swg,J);
+
+  // Losses
+  document.getElementById('copperLoss').innerHTML=
+    metric('Primary R',Rp.toFixed(3),' Ω')+
+    secDesigns.map((s,i)=>metric(`Secondary ${i+1} R`,s.Rs.toFixed(3),' Ω')).join('')+
+    metric('Primary I²R',P_cu_p.toFixed(2),' W','am')+
+    metric('Secondary I²R',P_cu_s.toFixed(2),' W','am')+
+    metric('Total copper loss',P_cu.toFixed(2),' W','am');
+
+  document.getElementById('coreLoss').innerHTML=
+    metric('Core material',coreMat)+
+    metric('Specific loss',specificLoss,' W/kg')+
+    metric('Core weight',coreWeight_kg.toFixed(2),' kg')+
+    metric('Core loss',P_fe.toFixed(2),' W','am')+
+    metric('Total loss',P_total.toFixed(2),' W','am');
+
+  let effHTML=`<thead><tr><th>Load</th><th>Output (W)</th><th>Cu Loss (W)</th><th>Fe Loss (W)</th><th>Total Loss (W)</th><th>Efficiency</th></tr></thead><tbody>`;
+  effData.forEach(r=>{
+    const cu=(P_cu*Math.pow(parseFloat(r.load)/100,2)).toFixed(2);
+    effHTML+=`<tr class="${r.eff===bestEff.eff?'best':''}"><td>${r.load}</td><td>${r.pOut}</td><td>${cu}</td><td>${P_fe.toFixed(2)}</td><td>${(parseFloat(cu)+P_fe).toFixed(2)}</td><td><strong>${r.eff}%</strong>${r.eff===bestEff.eff?' ⭐':''}</td></tr>`;
+  });
+  effHTML+='</tbody>';
+  document.getElementById('effTable').innerHTML=effHTML;
+
+  // Thermal
+  const tCls=tStatus==='pass'?'status-pass':tStatus==='warn'?'status-warn':'status-fail';
+  document.getElementById('thermalResult').innerHTML=`
+    <div class="metrics">
+      ${metric('Total losses',P_total.toFixed(2),' W','am')}
+      ${metric('Cooling method',cooling==='natural'?'Natural Air':'Forced Air')}
+      ${metric('Conv. coeff k',cooling==='natural'?'6':'12',' W/(m²·°C)')}
+      ${metric('Ambient temp',tamb,' °C')}
+      ${metric('Temperature rise',deltaT,' °C',parseFloat(deltaT)<=30?'gr':parseFloat(deltaT)<=50?'am':'')}
+      ${metric('Hotspot estimate',T_hotspot,' °C')}
+    </div>
+    <div style="margin-top:14px;display:flex;align-items:center;gap:10px">
+      <span>Thermal status:</span>
+      <span class="${tCls}">${tStatus==='pass'?'PASS — ΔT '+deltaT+'°C (≤ 30°C)':tStatus==='warn'?'MARGINAL — ΔT '+deltaT+'°C (31–50°C)':'FAIL — ΔT '+deltaT+'°C (> 50°C). Consider forced cooling or next larger core.'}</span>
+    </div>
+    ${tStatus==='fail'?'<p style="font-size:12.5px;color:var(--muted);margin-top:10px">Recommendation: Switch to forced-air cooling or select a larger core with lower total losses.</p>':''}`;
+
+  // Window check
+  const totalBuild=secDesigns.reduce((acc,s)=>acc+s.build,pbld).toFixed(2);
+  const fStatus=fillPct<=85?'pass':fillPct<=100?'warn':'fail';
+  document.getElementById('windowCheck').innerHTML=`
+    <div class="metrics">
+      ${metric('Required window',reqWin,' mm²')}${metric('Available window',b.win_mm2,' mm²')}
+      ${metric('Fill %',fillPct,'%')}${metric('Total winding build',totalBuild,' mm')}
+      ${metric('Ap available',Ap_avail,' cm²·mm²')}${metric('Ap required',Ap_req,' cm²·mm²')}
+      ${metric('Ap ratio',(Ap_avail/Ap_req).toFixed(2),'×')}
+    </div>
+    <div style="margin-top:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <span style="font-size:13px;color:var(--muted)">Window utilisation</span>
+        <span class="${fStatus==='pass'?'status-pass':fStatus==='warn'?'status-warn':'status-fail'}">
+          ${fStatus==='pass'?'PASS':fStatus==='warn'?'TIGHT':'FAIL — use next larger core'}
+        </span>
+      </div>
+      <div class="progress-wrap"><div class="progress-bar" style="width:${Math.min(fillPct,100)}%"></div></div>
+    </div>`;
+
+  document.getElementById('bobbinDims').innerHTML=`<div class="metrics">
+    ${metric('A — Height',b.a,' mm')}${metric('B — Width',b.b,' mm')}
+    ${metric('C — Centre leg',b.c,' mm')}${metric('D — Leg width',b.d,' mm')}
+    ${metric('E — Yoke width',b.e,' mm')}${metric('F — Gap',b.f,' mm')}
+    ${metric('Window width',b.ww,' mm')}${metric('Window height',b.wh,' mm')}
+    ${metric('Core area',b.core_cm2,' cm²')}${metric('Window area',b.win_mm2,' mm²')}
+  </div>`;
+
+  // BOM & Winding Sheet
+  let wsHTML=`<thead><tr><th>Winding</th><th>Voltage</th><th>VA</th><th>Turns</th><th>SWG</th><th>AWG</th><th>Wire dia (mm)</th><th>Layers</th><th>Build (mm)</th><th>R (Ω)</th></tr></thead><tbody>`;
+  wsHTML+=`<tr><td>Primary</td><td>${vin} V</td><td>${va}</td><td>${np}</td><td>SWG ${pw.swg}</td><td>AWG ${pw.awg}</td><td>${pw.dia}</td><td>${plyr}</td><td>${pbld}</td><td>${Rp.toFixed(3)}</td></tr>`;
+  secDesigns.forEach((s,i)=>{wsHTML+=`<tr><td>Secondary ${i+1}</td><td>${s.v} V</td><td>${s.va}</td><td>${s.ns}</td><td>SWG ${s.wire.swg}</td><td>AWG ${s.wire.awg}</td><td>${s.wire.dia}</td><td>${s.layers}</td><td>${s.build}</td><td>${s.Rs.toFixed(3)}</td></tr>`;});
+  wsHTML+='</tbody>';
+  document.getElementById('windingSheet').innerHTML=wsHTML;
+
+  // Insulation paper per layer estimate
+  const numLayers=plyr+secDesigns.reduce((a,s)=>a+s.layers,0);
+  const paperLen_m=(numLayers*(b.ww+10)/1000).toFixed(2); // 10mm overlap per layer
+
+  // Wire weights (approximate)
+  const copperDensity=8.96; // g/cm³
+  const pWireVol=np*(mtlP_mm/1000)*(pw.area*pp)/1000; // cm³
+  const pWireWeight=(pWireVol*copperDensity).toFixed(0);
+
+  let bomHTML=`<thead><tr><th>Item</th><th>Description</th><th>Specification</th><th>Est. Qty</th></tr></thead><tbody>`;
+  const bomItems=[
+    ['EI Core (E)',`${b.ei} / ${b.t} laminations — ${coreMat}`,'Grain-oriented CRGO / CRNGO',`${coreWeight_kg.toFixed(2)} kg`],
+    ['EI Core (I)',`${b.ei} / ${b.t} laminations — ${coreMat}`,'Same as E laminations',`${coreWeight_kg.toFixed(2)} kg`],
+    ['Bobbin',`${b.ei} plastic bobbin`,'Glass-filled nylon (GFN)',`1 No.`],
+    ['Primary Wire',`SWG ${pw.swg} / AWG ${pw.awg} — Ø${pw.dia} mm`,'Grade 2 enamelled copper',`${pWireWeight} g`],
+    ...secDesigns.map((s,i)=>[`Secondary ${i+1} Wire`,`SWG ${s.wire.swg} / AWG ${s.wire.awg} — Ø${s.wire.dia} mm`,'Grade 2 enamelled copper',`~${Math.round(s.ns*mtlP_mm/1000*s.wire.area*s.parallel*8.96)} g`]),
+    ['Inter-layer Paper','Nomex / Kraft insulation paper',`Width: ${b.ww+10} mm, 0.12 mm thick`,`${paperLen_m} m`],
+    ['Primary Sleeve','PVC sleeving for primary leads',`Ø${pw.dia+1} mm, 600V rated`,'2 lengths'],
+    ['Secondary Sleeves','PVC sleeving for sec. leads',`Ø${secDesigns[0].wire.dia+0.5} mm, 300V rated`,`${secDesigns.length*2} lengths`],
+    ['Varnish','Impregnation varnish','Class F (155°C) polyester varnish','As required'],
+    ['Tape','Kapton / Mylar tape','0.05 mm self-adhesive','As required'],
+  ];
+  bomItems.forEach(([item,desc,spec,qty])=>{bomHTML+=`<tr><td>${item}</td><td>${desc}</td><td>${spec}</td><td>${qty}</td></tr>`;});
+  bomHTML+='</tbody>';
+  document.getElementById('bomTable').innerHTML=bomHTML;
+
+  buildFormulas('ei',{freq,bm,J,kw,comp,tpv:tpv.toFixed(3),b});
+  buildConsts('ei',{freq,bm,J,kw,comp,type:selectedType,core:b.ei,coreMat,cooling,tamb});
+  showResults();
+}
+
+// ────────────────────────────────────────────────────────────
+// EE CALCULATION
+// ────────────────────────────────────────────────────────────
+function calcEE(){
+  const vin=parseFloat(document.getElementById('ee_vin').value);
+  const vout=parseFloat(document.getElementById('ee_vout').value);
+  const pw=parseFloat(document.getElementById('ee_power').value);
+  const fkhz=parseFloat(document.getElementById('ee_freq').value);
+  const bm=parseFloat(document.getElementById('ee_bm').value);
+  const duty=parseFloat(document.getElementById('ee_duty').value);
+  const J=parseFloat(document.getElementById('ee_jdens').value);
+  const kw=parseFloat(document.getElementById('ee_kw').value);
+  const mat=document.getElementById('ee_mat').value;
+
+  if(!vin||!vout||!pw){alert('Enter input voltage, output voltage, and power.');return;}
+  if(!selEE){alert('Select an EE ferrite core.');return;}
+
+  const c=selEE;
+  const Ac_m2=c.Ac*1e-6;
+  const fhz=fkhz*1000;
+  const np=Math.ceil((vin*duty)/(bm*Ac_m2*fhz));
+  const rat=vout/(vin*duty);
+  const ns=Math.ceil(np*rat);
+  const ip=pw/vin, is_=pw/vout;
+  const ap=ip/J, as_=is_/J;
+  const {wire:primW,parallel:primP}=selectWire(ap);
+  const {wire:secW,parallel:secP}=selectWire(as_);
+
+  const mtl=(2*(c.a/2+c.b/2))/1000;
+  const Rp=RHO_CU_75*(mtl*np)/(primW.area*primP);
+  const Rs=RHO_CU_75*(mtl*ns)/(secW.area*secP);
+  const P_cu=ip*ip*Rp+is_*is_*Rs;
+
+  // Core loss — Steinmetz approximation
+  const Ve_m3=c.Ac*c.Le*1e-9;
+  const specifLoss=CORE_LOSS[mat.split('/')[0].trim()]||80;
+  const P_fe=specifLoss*1000*Ve_m3; // W
+
+  const P_total=P_cu+P_fe;
+  const eff=(pw/(pw+P_total)*100).toFixed(1);
+
+  const copper=np*ap+ns*as_;
+  const reqWin=(copper/kw).toFixed(1);
+  const fillPct=(parseFloat(reqWin)/c.win_mm2*100).toFixed(1);
+
+  document.getElementById('resultBadge').textContent='EE Ferrite · '+c.ee+' · '+mat;
+  document.getElementById('metricsCore').innerHTML=
+    metric('Core',c.ee,'','hi')+metric('Ac eff.',c.Ac,' mm²')+
+    metric('Le path',c.Le,' mm')+metric('Primary turns',np,' T')+
+    metric('Secondary turns',ns,' T')+metric('Turns ratio',rat.toFixed(3),':1')+
+    metric('Switching freq',fkhz,' kHz')+metric('Duty cycle',duty);
+
+  document.getElementById('metricsElec').innerHTML=
+    metric('Input',vin,' V')+metric('Output',vout,' V')+
+    metric('Power',pw,' W')+metric('Bm',bm,' T')+
+    metric('Primary I',ip.toFixed(3),' A')+metric('Secondary I',is_.toFixed(3),' A')+
+    metric('Efficiency',eff,'%','gr')+metric('Total loss',P_total.toFixed(2),' W','am');
+
+  document.getElementById('fitnessTable').innerHTML=`<p style="font-size:13px;color:var(--muted)">EE core fitness scoring based on power range and window fill. Selected: <strong style="color:var(--white)">${c.ee}</strong> — rated ${c.pw} at ${c.fk}.</p>`;
+
+  let wCards=`<div class="card"><div class="card-title">🔵 Primary</div><div class="metrics">
+    ${metric('Turns',np,' T')}${metric('Current',ip.toFixed(3),' A')}
+    ${metric(wireStd,wireLabel(primW))}${metric('Wire dia',primW.dia,' mm')}
+    ${metric('Wire area',primW.area,' mm²')}${metric('Parallel',primP)}
+    ${metric('Resistance',Rp.toFixed(3),' Ω')}${metric('I²R',( ip*ip*Rp).toFixed(2),' W','am')}
+  </div></div>
+  <div class="card" style="margin-top:1rem"><div class="card-title">🟢 Secondary</div><div class="metrics">
+    ${metric('Turns',ns,' T')}${metric('Current',is_.toFixed(3),' A')}
+    ${metric(wireStd,wireLabel(secW))}${metric('Wire dia',secW.dia,' mm')}
+    ${metric('Wire area',secW.area,' mm²')}${metric('Parallel',secP)}
+    ${metric('Resistance',Rs.toFixed(3),' Ω')}${metric('I²R',(is_*is_*Rs).toFixed(2),' W','am')}
+  </div></div>`;
+  document.getElementById('windingCards').innerHTML=wCards;
+  buildWireTable(primW.swg,secW.swg,J);
+
+  document.getElementById('copperLoss').innerHTML=
+    metric('Primary R',Rp.toFixed(3),' Ω')+metric('Secondary R',Rs.toFixed(3),' Ω')+
+    metric('Primary I²R',(ip*ip*Rp).toFixed(2),' W','am')+
+    metric('Secondary I²R',(is_*is_*Rs).toFixed(2),' W','am')+
+    metric('Total copper',P_cu.toFixed(2),' W','am');
+
+  document.getElementById('coreLoss').innerHTML=
+    metric('Material',mat)+metric('Spec. loss',specifLoss,' kW/m³')+
+    metric('Core volume',(c.Ac*c.Le/1e6*1e6).toFixed(0),' mm³')+
+    metric('Core loss',P_fe.toFixed(2),' W','am')+
+    metric('Total loss',P_total.toFixed(2),' W','am');
+
+  document.getElementById('effTable').innerHTML=`<thead><tr><th>Load</th><th>Output (W)</th><th>Efficiency</th></tr></thead><tbody>`+
+    [0.25,0.50,0.75,1.0].map(l=>`<tr class="${l===1?'best':''}"><td>${l*100}%</td><td>${(pw*l).toFixed(0)}</td><td>${(pw*l/(pw*l+P_cu*l*l+P_fe)*100).toFixed(1)}%</td></tr>`).join('')+
+    '</tbody>';
+
+  document.getElementById('thermalResult').innerHTML=metric('Total losses',P_total.toFixed(2),' W','am')+
+    metric('Efficiency',eff,'%','gr')+
+    `<p style="font-size:12.5px;color:var(--muted);margin-top:10px">Ferrite core thermal: ensure core temperature stays below Tc (Curie temp ≈ 200–250°C for MnZn). At ${P_fe.toFixed(2)} W core loss, forced airflow or heatsink recommended above 50 W total dissipation.</p>`;
+
+  const fSt=parseFloat(fillPct)<=85?'pass':parseFloat(fillPct)<=100?'warn':'fail';
+  document.getElementById('windowCheck').innerHTML=`<div class="metrics">
+    ${metric('Required',reqWin,' mm²')}${metric('Available',c.win_mm2,' mm²')}${metric('Fill',fillPct,'%')}
+  </div><div style="margin-top:10px"><div class="progress-wrap"><div class="progress-bar" style="width:${Math.min(parseFloat(fillPct),100)}%"></div></div>
+  <div style="margin-top:8px"><span class="${fSt==='pass'?'status-pass':fSt==='warn'?'status-warn':'status-fail'}">${fSt==='pass'?'PASS':'FAIL — use larger core'}</span></div></div>
+  <div style="margin-top:12px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:10px 14px;font-size:12.5px;color:rgba(251,191,36,.9)">
+  Ferrite grade: N87/PC40 (20–100 kHz) · N97/PC44 (100–300 kHz) · N49/PC95 (300 kHz+)</div>`;
+
+  document.getElementById('bobbinDims').innerHTML=`<div class="metrics">
+    ${metric('A',c.a,' mm')}${metric('B',c.b,' mm')}${metric('C',c.c,' mm')}${metric('D',c.d,' mm')}
+    ${metric('Ac eff.',c.Ac,' mm²')}${metric('Le',c.Le,' mm')}
+    ${metric('Power range',c.pw)}${metric('Freq. range',c.fk)}
+  </div>`;
+
+  document.getElementById('windingSheet').innerHTML=`<thead><tr><th>Winding</th><th>Turns</th><th>SWG</th><th>AWG</th><th>Dia (mm)</th><th>Parallel</th><th>R (Ω)</th></tr></thead><tbody>
+    <tr><td>Primary</td><td>${np}</td><td>SWG ${primW.swg}</td><td>AWG ${primW.awg}</td><td>${primW.dia}</td><td>${primP}</td><td>${Rp.toFixed(3)}</td></tr>
+    <tr><td>Secondary</td><td>${ns}</td><td>SWG ${secW.swg}</td><td>AWG ${secW.awg}</td><td>${secW.dia}</td><td>${secP}</td><td>${Rs.toFixed(3)}</td></tr></tbody>`;
+
+  document.getElementById('bomTable').innerHTML=`<thead><tr><th>Item</th><th>Description</th><th>Spec</th></tr></thead><tbody>
+    <tr><td>EE Core set</td><td>${c.ee} ferrite pair</td><td>${mat} material</td></tr>
+    <tr><td>Bobbin</td><td>${c.ee} plastic bobbin</td><td>EE series, high-temp nylon</td></tr>
+    <tr><td>Primary wire</td><td>SWG ${primW.swg} / AWG ${primW.awg}</td><td>Litz or enamelled copper</td></tr>
+    <tr><td>Secondary wire</td><td>SWG ${secW.swg} / AWG ${secW.awg}</td><td>Enamelled copper</td></tr>
+    <tr><td>Insulation tape</td><td>Kapton / Mylar</td><td>0.05 mm, 3-layer between windings</td></tr>
+    <tr><td>Bobbin clip</td><td>Ferrite core clip</td><td>Stainless spring clip</td></tr></tbody>`;
+
+  buildFormulas('ee',{bm,duty,fkhz,kw,J});
+  buildConsts('ee',{bm,duty,fkhz,kw,J,type:'EE Ferrite SMPS',core:c.ee,mat});
+  showResults();
+}
+
+// ════════════════════════════════════════════════════════════
+// WIRE TABLE
+// ════════════════════════════════════════════════════════════
+function buildWireTable(pSwg,sSwg,J){
+  let h=`<thead><tr><th>SWG</th><th>AWG</th><th>Metric (mm²)</th><th>Dia (mm)</th><th>Area (mm²)</th><th>Max I @ ${J} A/mm²</th></tr></thead><tbody>`;
+  WIRE_TABLE.forEach(w=>{
+    const isP=w.swg===pSwg,isS=w.swg===sSwg;
+    h+=`<tr class="${isP?'hp':isS?'hs':''}"><td>${w.swg}${isP?' ★P':''}${isS?' ★S':''}</td><td>${w.awg}</td><td>${w.area.toFixed(3)} mm²</td><td>${w.dia}</td><td>${w.area}</td><td>${(w.area*J).toFixed(3)} A</td></tr>`;
+  });
+  h+='</tbody>';
+  document.getElementById('wireTable').innerHTML=h;
+}
+
+// ════════════════════════════════════════════════════════════
+// FORMULAS & CONSTANTS
+// ════════════════════════════════════════════════════════════
+function buildFormulas(family,p){
+  const items=family==='ei'?[
+    ['Core area (empirical)','Ac = 1.15 × √VA  (cm²)'],
+    ['Turns per volt','TPV = 1 / (4.44·f·Bm·Ac)'],
+    ['Primary turns','Np = ⌈Vp × TPV⌉'],
+    ['Secondary turns','Ns = ⌈Vs × TPV × Kc⌉'],
+    ['Turns ratio','a = Np / Ns'],
+    ['Primary current','Ip = VA / Vp'],
+    ['Secondary current','Is = VA / Vs'],
+    ['Wire area','Aw = I / J  (mm²)'],
+    ['Window product','Ap = Ac × Aw  (cm²·mm²)'],
+    ['Required Ap','Ap_req = VA/(Kw·J·Bm·4.44·f)'],
+    ['Req. window area','Wa = (Np·Ap + Ns·As) / Kw'],
+    ['Copper resistance','R = ρ₇₅·(MTL·N)/Aw  (Ω)'],
+    ['Copper loss','Pcu = Σ I²·R  (W)'],
+    ['Core loss','Pfe = Wsp × Wcore  (W)'],
+    ['Efficiency','η = Pout/(Pout+Pcu+Pfe) × 100%'],
+    ['Temperature rise','ΔT = Ptotal/(k·As)  (°C)'],
+  ]:[
+    ['Volt-second balance','Np = (Vin·D)/(Bm·Ac·f)'],
+    ['Turns ratio','a = Vout/(Vin·D)'],
+    ['Secondary turns','Ns = ⌈Np·a⌉'],
+    ['Wire area','Aw = I/J  (mm²)'],
+    ['Copper resistance','R = ρ₇₅·(MTL·N)/Aw'],
+    ['Core loss (Steinmetz)','Pfe = kf·Bm^α·f^β·Ve'],
+    ['Efficiency','η = Pout/(Pout+Pcu+Pfe)'],
+  ];
+  document.getElementById('formulaGrid').innerHTML=items.map(([n,e])=>`<div class="formula-item"><div class="formula-name">${n}</div><div class="formula-expr">${e}</div></div>`).join('');
+}
+
+function buildConsts(family,p){
+  const rows=family==='ei'?[
+    ['EMF constant','4.44','Sinusoidal waveform (form factor)'],
+    ['Core area factor K','1.15','Empirical, 50 Hz EI control transformer'],
+    ['Flux density Bm',p.bm+' T','User selected'],
+    ['Frequency',p.freq+' Hz','User selected'],
+    ['Current density J',p.J+' A/mm²','User selected'],
+    ['Fill factor Kw',p.kw,'User selected'],
+    ['Sec. comp. Kc',p.comp,'User selected'],
+    ['Cu resistivity ρ₇₅','0.0217 Ω·mm²/m','Copper at 75°C'],
+    ['Insulation allowance','+0.10 mm/wire','Per-wire OD estimate'],
+    ['Core material',p.coreMat,'User selected'],
+    ['Cooling',p.cooling,'User selected'],
+    ['Ambient temp',p.tamb+' °C','User selected'],
+    ['Wire standard','SWG / AWG / Metric','All three shown in wire table'],
+  ]:[
+    ['Peak flux Bm',p.bm+' T','User selected'],
+    ['Switching freq',p.fkhz+' kHz','User selected'],
+    ['Duty cycle D',p.duty,'User selected'],
+    ['J',p.J+' A/mm²','User selected'],
+    ['Kw',p.kw,'User selected'],
+    ['Cu resistivity ρ₇₅','0.0217 Ω·mm²/m','Copper at 75°C'],
+    ['Ferrite material',p.mat,'User selected'],
+    ['Steinmetz Bm ref.','0.20 T','MnZn baseline for loss scaling'],
+  ];
+  document.getElementById('constTable').innerHTML=rows.map(([s,v,n])=>`<tr><td>${s}</td><td>${v}</td><td>${n}</td></tr>`).join('');
+}
+
+function showResults(){
+  const r=document.getElementById('results');
+  r.style.display='block';
+  switchTab('summary');
+  setTimeout(()=>r.scrollIntoView({behavior:'smooth',block:'start'}),80);
+}
+
+// ════════════════════════════════════════════════════════════
+// PRINT / PDF EXPORT
+// ════════════════════════════════════════════════════════════
+function printReport(){window.print();}
+</script>
+</body>
+</html>
